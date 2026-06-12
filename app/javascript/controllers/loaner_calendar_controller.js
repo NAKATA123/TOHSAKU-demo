@@ -1,58 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["tab", "panel", "calendar"]
-  static values = { events: Array }
+  static targets = ["tab", "panel"]
 
   connect() {
-    this.calendar = null
-    this.calendarRendered = false
+    const tab = new URLSearchParams(window.location.search).get("tab")
+    if (tab) this.activate(tab)
   }
 
   switch(event) {
-    const selectedTab = event.currentTarget.dataset.tab
-
-    this.tabTargets.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === selectedTab))
-    this.panelTargets.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === selectedTab))
-
-    if (selectedTab === "calendar") {
-      requestAnimationFrame(() => this.renderCalendar())
-    }
+    this.activate(event.currentTarget.dataset.tab)
   }
 
-  renderCalendar() {
-    if (!this.calendar) {
-      this.calendar = new FullCalendar.Calendar(this.calendarTarget, {
-        initialView: "dayGridMonth",
-        locale: "ja",
-        height: "auto",
-        firstDay: 1,
-        nowIndicator: true,
-        dayMaxEvents: 3,
-        headerToolbar: {
-          left: "prev,next today",
-          center: "title",
-          right: ""
-        },
-        buttonText: {
-          today: "今日"
-        },
-        events: this.eventsValue,
-        eventClick: (info) => {
-          info.jsEvent.preventDefault()
-          window.location.href = info.event.url
-        },
-        dateClick: (info) => {
-          window.location.href = `/rentals/new?start_date=${info.dateStr}`
-        }
-      })
-    }
-
-    if (!this.calendarRendered) {
-      this.calendar.render()
-      this.calendarRendered = true
-    }
-
-    this.calendar.updateSize()
+  activate(selectedTab) {
+    this.tabTargets.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === selectedTab))
+    this.panelTargets.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === selectedTab))
   }
 }

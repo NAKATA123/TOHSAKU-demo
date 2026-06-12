@@ -5,6 +5,7 @@ ja:
       rental: "貸出"
       loaner_car: "代車"
       customer: "顧客"
+      user: "ユーザー"
     attributes:
       repair:
         id: "修理ID"
@@ -23,6 +24,11 @@ ja:
       customer:
         id: "顧客ID"
         name: "顧客名"
+      user:
+        name: "名前"
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"
 
   enums:
     repair:
@@ -33,5 +39,9 @@ ja:
 
   errors:
     messages:
-      required: "を入力してください"
-      
+      blank: "を入力してください"
+      too_short: "は%{count}文字以上で入力してください"
+      too_long: "は%{count}文字以下で入力してください"
+      invalid: "は不正な値です"
+      taken: "はすでに使用されています"
+      confirmation: "と%{attribute}の入力が一致しません"

@@ -13,6 +13,7 @@
   <table class="repair-table">
     <thead>
       <tr>
+        <th>名前</th>
         <th>メールアドレス</th>
         <th>権限</th>
         <th></th>
@@ -21,6 +22,7 @@
     <tbody>
       <% @users.each do |user| %>
         <tr>
+          <td><%= user.name %></td>
           <td><%= user.email %></td>
           <td>
             <% if user.admin? %>
@@ -29,12 +31,13 @@
               <span class="status-badge">従業員</span>
             <% end %>
           </td>
-          <td>
+          <td class="repair-actions">
+            <%= link_to "編集", edit_user_path(user), class: "btn-outline" %>
             <% if user != current_user %>
               <%= button_to "削除",
                     user_path(user),
                     method: :delete,
-                    data: { turbo_confirm: "#{user.email} を削除しますか？" },
+                    data: { turbo_confirm: "#{user.name || user.email} を削除しますか？" },
                     class: "btn-danger" %>
             <% else %>
               <span class="muted">（自分）</span>

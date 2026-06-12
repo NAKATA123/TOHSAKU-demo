@@ -3,12 +3,13 @@ class RentalsController < ApplicationController
 
   def new
     @repair = Repair.find_by(id: params[:repair_id])
-    @rental = Rental.new(start_date: params[:start_date])
+    @rental = Rental.new(start_date: params[:start_date], loaner_car_id: params[:loaner_car_id])
     @loaner_cars = LoanerCar.all
   end
 
   def create
     @rental = Rental.new(rental_params)
+    @rental.created_by = current_user
 
     if @rental.save
       if @rental.repair.present?
@@ -27,11 +28,11 @@ class RentalsController < ApplicationController
     if params[:loaner_car_id]
       @loaner_car = LoanerCar.find(params[:loaner_car_id])
       @rentals = @loaner_car.rentals
-                             .includes(repair: { car: :customer })
-                             .order(:start_date)
+                             .includes(repair: { car: :customer }, created_by: {})
+                             .order(created_at: :desc)
     else
-      @rentals = Rental.includes(repair: { car: :customer }, loaner_car: {})
-                       .order(:start_date)
+      @rentals = Rental.includes(repair: { car: :customer }, loaner_car: {}, created_by: {})
+                       .order(created_at: :desc)
     end
   end
 

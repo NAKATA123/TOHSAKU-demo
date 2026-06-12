@@ -1105,6 +1105,183 @@ body {
   background: #f0f9fa;
 }
 
+/* ===== 代車グリッド ===== */
+
+.loaner-grid-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.loaner-grid-nav-period {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.btn-sm {
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+}
+
+.loaner-grid-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.loaner-grid {
+  border-collapse: collapse;
+  background: #fff;
+  min-width: 700px;
+  width: 100%;
+}
+
+.loaner-grid th,
+.loaner-grid td {
+  border-right: 1px solid #e2e8f0;
+}
+
+.loaner-grid th:last-child,
+.loaner-grid td:last-child { border-right: none; }
+
+.loaner-grid thead th {
+  background: #f8fafc;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-align: center;
+  padding: 8px 4px;
+  border-bottom: 2px solid #e2e8f0;
+  white-space: nowrap;
+  min-width: 52px;
+}
+
+.loaner-grid-car-header {
+  text-align: left !important;
+  padding: 8px 14px !important;
+  min-width: 110px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  border-right: 2px solid #e2e8f0 !important;
+}
+
+.grid-day-label {
+  font-size: 10px;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.loaner-grid thead th.grid-today {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.loaner-grid thead th.grid-weekend {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.loaner-grid tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.loaner-grid tbody tr:last-child { border-bottom: none; }
+
+.loaner-grid-car {
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  height: 52px;
+  position: sticky;
+  left: 0;
+  background: #fff;
+  z-index: 1;
+  border-right: 2px solid #e2e8f0 !important;
+}
+
+.loaner-grid tbody tr:hover .loaner-grid-car { background: #f8fafc; }
+
+.loaner-grid-empty {
+  height: 52px;
+  background: #fff;
+}
+
+.loaner-grid-empty.grid-today   { background: #f0fdf4; }
+.loaner-grid-empty.grid-weekend { background: #fafaf9; }
+
+.loaner-grid-rented {
+  background: #eff6ff;
+  border-left: 3px solid #3b82f6;
+  padding: 0 10px;
+  vertical-align: middle;
+}
+
+.loaner-grid-rental-link {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d4ed8;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.loaner-grid-rental-link:hover { text-decoration: underline; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 14px;
+}
+
+.section-header .section-title { margin: 0; }
+
+.sort-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.sort-btn {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1.5px solid #e2e8f0;
+  color: #64748b;
+  background: #fff;
+  transition: 0.15s;
+}
+
+.sort-btn:hover { border-color: #94a3b8; color: #1e293b; }
+.sort-btn.active { background: #0f172a; border-color: #0f172a; color: #fff; }
+
+.loaner-grid-car-link {
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 700;
+  display: block;
+  width: 100%;
+}
+
+.loaner-grid-car-link:hover {
+  color: #0d8a95;
+  text-decoration: underline;
+}
+
 /* ===== Mobile ===== */
 
 @media (max-width: 640px) {

@@ -18,6 +18,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
+  def update
+    @user = User.find(params[:id])
+    if @user.update(edit_params)
+      redirect_to users_path, notice: "ユーザー情報を更新しました"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     user = User.find(params[:id])
     if user == current_user
@@ -31,6 +44,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :role)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role)
+  end
+
+  def edit_params
+    params.require(:user).permit(:name, :email, :role)
   end
 end

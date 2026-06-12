@@ -2,11 +2,20 @@ class LoanerCarsController < ApplicationController
   before_action :require_login
   before_action :set_loaner_car, only: [:edit, :update, :destroy]
 
-  # 一覧（タブ切り替え＋カレンダー）
+  # 一覧（タブ切り替え＋グリッド）
   def index
     @loaner_cars = LoanerCar.all.order(created_at: :desc)
-
     today = Time.zone.today
+
+    # グリッド用（2週間）
+    @grid_start = params[:start_date].present? ? Date.parse(params[:start_date]) : today
+    @grid_end   = @grid_start + 13.days
+    @grid_dates = (@grid_start..@grid_end).to_a
+
+    grid_rentals = Rental
+      .includes(repair: { car: :customer })
+      .where("start_date <= ? AND end_date >= ?", @grid_end, @grid_start)
+    @rental_by_car = grid_rentals.group_by(&:loaner_car_id)
 
     # 貸出中
     @current_rentals = Rental
@@ -15,22 +24,12 @@ class LoanerCarsController < ApplicationController
       .order(:start_date)
 
     # 貸出予定
+    @upcoming_sort = params[:upcoming_sort] == "date" ? "date" : "created"
+    upcoming_order = @upcoming_sort == "date" ? { start_date: :asc } : { created_at: :desc }
     @upcoming_rentals = Rental
-      .includes(:loaner_car, repair: { car: :customer })
+      .includes(:loaner_car, :created_by, repair: { car: :customer })
       .where("start_date > ?", today)
-      .order(:start_date)
-
-    # カレンダー用イベント
-    @rentals = Rental.includes(:loaner_car, repair: { car: :customer })
-
-    @calendar_events = @rentals.map do |r|
-      {
-        title: "#{r.loaner_car.name} - #{r.repair&.car&.customer&.name}",
-        start: r.start_date,
-        end: r.end_date + 1.day,
-        url: rental_path(r)
-      }
-    end
+      .order(upcoming_order)
   end
 
   # 新規登録フォーム

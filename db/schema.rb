@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_03_000003) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_12_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_03_000003) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "created_by_id"
+    t.index ["created_by_id"], name: "index_rentals_on_created_by_id"
     t.index ["loaner_car_id"], name: "index_rentals_on_loaner_car_id"
     t.index ["repair_id"], name: "index_rentals_on_repair_id"
   end
@@ -78,11 +80,13 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_03_000003) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "role", default: 0, null: false
+    t.string "name"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "cars", "customers"
   add_foreign_key "rentals", "loaner_cars"
   add_foreign_key "rentals", "repairs"
+  add_foreign_key "rentals", "users", column: "created_by_id"
   add_foreign_key "repairs", "cars"
 end

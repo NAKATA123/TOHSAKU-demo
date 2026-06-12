@@ -1,6 +1,7 @@
 class Rental < ApplicationRecord
   belongs_to :loaner_car
   belongs_to :repair, optional: true
+  belongs_to :created_by, class_name: "User", optional: true
 
   validates :start_date, presence: true
   validates :end_date, presence: true

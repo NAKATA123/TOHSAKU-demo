@@ -1,6 +1,4 @@
-<div class="page-container"
-     data-controller="loaner-calendar"
-     data-loaner-calendar-events-value="<%= @calendar_events.to_json %>">
+<div class="page-container" data-controller="loaner-calendar">
 
   <h1 class="page-title page-title--img">
     <%= image_tag "icon_32-removebg-preview.png", alt: "", class: "title-car-img" %>
@@ -16,13 +14,14 @@
     </button>
 
     <button class="tab-btn"
-        data-tab="calendar"
+        data-tab="grid"
         data-loaner-calendar-target="tab"
         data-action="click->loaner-calendar#switch">
-      カレンダー
+      グリッド
     </button>
   </div>
 
+  <%# ===== 一覧タブ ===== %>
   <div id="tab-list"
        class="tab-content active"
        data-panel="list"
@@ -93,27 +92,41 @@
       <div class="card empty-state"><p class="muted">現在貸出中の代車はありません。</p></div>
     <% end %>
 
-    <h2 class="section-title">貸出予定</h2>
+    <div class="section-header">
+      <h2 class="section-title">貸出予定</h2>
+      <div class="sort-toggle">
+        <%= link_to "直近順", loaner_cars_path(upcoming_sort: "date"),
+              class: "sort-btn #{'active' if @upcoming_sort == 'date'}" %>
+        <%= link_to "登録順", loaner_cars_path(upcoming_sort: "created"),
+              class: "sort-btn #{'active' if @upcoming_sort == 'created'}" %>
+      </div>
+    </div>
 
     <% if @upcoming_rentals.any? %>
       <table class="repair-table">
-        <tr>
-          <th>代車</th>
-          <th>期間</th>
-          <th>顧客</th>
-        </tr>
-        <% @upcoming_rentals.each do |r| %>
+        <thead>
           <tr>
-            <td><%= r.loaner_car.name %></td>
-            <td>
-              <%= r.start_date.strftime("%Y/%m/%d") %> 〜
-              <%= r.end_date.strftime("%Y/%m/%d") %>
-            </td>
-            <td>
-              <%= r.repair&.car&.customer&.name || "顧客情報なし" %>
-            </td>
+            <th>代車</th>
+            <th>期間</th>
+            <th>顧客</th>
+            <th>登録日時</th>
+            <th>登録者</th>
           </tr>
-        <% end %>
+        </thead>
+        <tbody>
+          <% @upcoming_rentals.each do |r| %>
+            <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
+              <td><%= r.loaner_car.name %></td>
+              <td>
+                <%= r.start_date.strftime("%Y/%m/%d") %> 〜
+                <%= r.end_date.strftime("%Y/%m/%d") %>
+              </td>
+              <td><%= r.repair&.car&.customer&.name || "顧客情報なし" %></td>
+              <td class="muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+              <td><%= r.created_by&.name || "-" %></td>
+            </tr>
+          <% end %>
+        </tbody>
       </table>
     <% else %>
       <div class="card empty-state"><p class="muted">貸出予定はありません。</p></div>
@@ -121,11 +134,87 @@
 
   </div>
 
-  <div id="tab-calendar"
+  <%# ===== グリッドタブ ===== %>
+  <div id="tab-grid"
        class="tab-content"
-       data-panel="calendar"
+       data-panel="grid"
        data-loaner-calendar-target="panel">
-    <div id="calendar" data-loaner-calendar-target="calendar"></div>
+
+    <div class="loaner-grid-nav">
+      <%= link_to "< 前の2週間", loaner_cars_path(start_date: (@grid_start - 14.days).to_s, tab: "grid"), class: "btn-outline btn-sm" %>
+      <span class="loaner-grid-nav-period">
+        <%= @grid_start.strftime("%Y/%m/%d") %> 〜 <%= @grid_end.strftime("%Y/%m/%d") %>
+      </span>
+      <%= link_to "次の2週間 >", loaner_cars_path(start_date: (@grid_start + 14.days).to_s, tab: "grid"), class: "btn-outline btn-sm" %>
+      <%= link_to "今日", loaner_cars_path(tab: "grid"), class: "btn-outline btn-sm" %>
+    </div>
+
+    <div class="loaner-grid-wrap">
+      <table class="loaner-grid">
+        <thead>
+          <tr>
+            <th class="loaner-grid-car-header">代車</th>
+            <% @grid_dates.each do |date| %>
+              <%
+                th_class = []
+                th_class << "grid-today"   if date == Time.zone.today
+                th_class << "grid-weekend" if date.saturday? || date.sunday?
+              %>
+              <th class="<%= th_class.join(' ') %>">
+                <%= date.strftime("%-m/%-d") %><br>
+                <span class="grid-day-label"><%= %w[日 月 火 水 木 金 土][date.wday] %></span>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @loaner_cars.any? %>
+            <% @loaner_cars.each do |car| %>
+              <tr>
+                <td class="loaner-grid-car">
+                  <%= link_to car.name, new_rental_path(loaner_car_id: car.id, tab: "grid"), class: "loaner-grid-car-link" %>
+                </td>
+                <%
+                  rentals_for_car = (@rental_by_car[car.id] || [])
+                  consumed = []
+                  @grid_dates.each do |date|
+                    unless consumed.include?(date)
+                      rental = rentals_for_car.find { |r| r.start_date <= date && r.end_date >= date }
+                      if rental
+                        end_in_grid = [rental.end_date, @grid_end].min
+                        span_dates  = (date..end_in_grid).to_a
+                        consumed.concat(span_dates)
+                %>
+                        <td colspan="<%= span_dates.size %>" class="loaner-grid-rented">
+                          <%= link_to(rental.repair&.car&.customer&.name || "貸出中",
+                                rental_path(rental),
+                                class: "loaner-grid-rental-link") %>
+                        </td>
+                <%
+                      else
+                        cell_class = "loaner-grid-empty"
+                        cell_class += " grid-today"   if date == Time.zone.today
+                        cell_class += " grid-weekend" if date.saturday? || date.sunday?
+                %>
+                        <td class="<%= cell_class %>"></td>
+                <%
+                      end
+                    end
+                  end
+                %>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="<%= @grid_dates.size + 1 %>" class="loaner-grid-empty" style="text-align:center; padding: 24px; color: #94a3b8;">
+                代車が登録されていません
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
   </div>
 
 </div>

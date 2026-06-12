@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   resources :rentals, only: [:new, :create, :show, :destroy]
 
-  resources :users, only: [:index, :new, :create, :destroy]
+  resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
 
   resources :notices, only: [:create, :update]
 
