@@ -226,6 +226,24 @@ body {
 
 .header-icon-btn:hover { opacity: 1; }
 
+.push-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.push-btn--on {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #fff;
+}
+.push-btn:disabled { opacity: 0.4; cursor: default; }
+
 .logout form { margin: 0; }
 
 .logout-btn {

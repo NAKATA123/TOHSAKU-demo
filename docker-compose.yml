@@ -20,6 +20,9 @@ services:
       - db
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/app_development
+      VAPID_PUBLIC_KEY: "BA7m4I-0_--h911ToFUSYf0c5U_P_AGmjjQk0iFpFNdOzgFlsak-oi82m15b949VG9Crp-1rdP_HebEVt8x12IU="
+      VAPID_PRIVATE_KEY: "EQv7W2Xm3fT8jRno-fIS7Y6m8nuHqheDzECf-bJ7iYA="
+      VAPID_SUBJECT: "mailto:admin@tohsaku.local"
     command: bash -lc "bundle install && bundle exec rails s -b 0.0.0.0 -p 3000"
 
 volumes:

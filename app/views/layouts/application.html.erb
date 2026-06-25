@@ -8,6 +8,7 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <meta name="vapid-public-key" content="<%= ENV['VAPID_PUBLIC_KEY'] %>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
@@ -31,8 +32,8 @@
         <nav class="nav">
           <span class="nav-flag">🏁</span>
           <%= link_to "修理", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %>
-          <%= link_to "顧客", customers_path, class: "nav-link #{'active' if current_page?(customers_path)}" %>
           <%= link_to "代車", loaner_cars_path, class: "nav-link #{'active' if current_page?(loaner_cars_path)}" %>
+          <%= link_to "顧客", customers_path, class: "nav-link #{'active' if current_page?(customers_path)}" %>
           <% if current_user&.admin? %>
             <%= link_to "ユーザー管理", users_path, class: "nav-link #{'active' if current_page?(users_path)}" %>
           <% end %>
@@ -42,6 +43,9 @@
           <span class="header-user">
             <span class="header-user-role"><%= current_user.admin? ? "ADMIN" : "STAFF" %></span>
           </span>
+          <% if current_user&.admin? %>
+            <button id="push-toggle-btn" class="push-btn" data-subscribed="false">🔕 通知OFF</button>
+          <% end %>
           <%= link_to "🔑", edit_password_path, class: "header-icon-btn", title: "パスワード変更" %>
           <%= button_to "ログアウト", logout_path, method: :delete, class: "logout-btn" %>
         </div>

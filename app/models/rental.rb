@@ -5,6 +5,18 @@ class Rental < ApplicationRecord
 
   validates :start_date, presence: true
   validates :end_date, presence: true
+
+  after_create :notify_push
+
+  private
+
+  def notify_push
+    customer = customer_name.presence || repair&.car&.customer&.name || "顧客情報なし"
+    PushSubscription.broadcast_to_all(
+      title: "代車貸出が登録されました",
+      body:  "#{loaner_car.name} → #{customer}（#{start_date.strftime('%m/%d')}〜#{end_date.strftime('%m/%d')}）"
+    )
+  end
   validate :end_date_after_start_date
   validate :no_double_booking
 
