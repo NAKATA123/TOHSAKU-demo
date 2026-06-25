@@ -14,7 +14,7 @@
 
     <tr>
       <th>顧客</th>
-      <td><%= @rental.repair&.car&.customer&.name || "顧客情報なし" %></td>
+      <td><%= @rental.customer_name.presence || @rental.repair&.car&.customer&.name || "顧客情報なし" %></td>
     </tr>
 
     <tr>

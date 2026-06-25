@@ -54,7 +54,8 @@ class RentalsController < ApplicationController
       :loaner_car_id,
       :repair_id,
       :start_date,
-      :end_date
+      :end_date,
+      :customer_name
     )
   end
 end

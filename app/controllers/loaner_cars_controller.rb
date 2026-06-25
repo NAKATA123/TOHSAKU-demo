@@ -23,6 +23,16 @@ class LoanerCarsController < ApplicationController
       .where("start_date <= ? AND end_date >= ?", today, today)
       .order(:start_date)
 
+    # 貸出履歴（月フィルター＋ページネーション）
+    @history_month = params[:history_month].presence || today.strftime("%Y-%m")
+    month_start = Date.parse("#{@history_month}-01")
+    month_end   = month_start.end_of_month
+    @all_rentals = Rental
+      .includes(:loaner_car, :created_by, repair: { car: :customer })
+      .where("start_date <= ? AND end_date >= ?", month_end, month_start)
+      .order(start_date: :desc)
+      .page(params[:history_page]).per(100)
+
     # 貸出予定
     @upcoming_sort = params[:upcoming_sort] == "date" ? "date" : "created"
     upcoming_order = @upcoming_sort == "date" ? { start_date: :asc } : { created_at: :desc }
