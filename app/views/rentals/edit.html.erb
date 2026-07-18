@@ -1,0 +1,48 @@
+<div class="page-container">
+  <h1 class="page-title">貸出編集</h1>
+
+  <% if @rental.errors.any? %>
+    <div class="card card-error card-mb">
+      <p class="card-error-title">入力内容を確認してください</p>
+      <ul class="card-error-list">
+        <% @rental.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card">
+    <%= form_with model: @rental, local: true do |f| %>
+
+      <div>
+        <%= f.label :customer_name, "顧客名", class: "form-label" %>
+        <%= f.text_field :customer_name, class: "form-input", placeholder: "例：田中 太郎" %>
+      </div>
+
+      <div>
+        <%= f.label :reason, "理由", class: "form-label" %>
+        <%= f.text_field :reason, class: "form-input", placeholder: "例：車検、修理、点検" %>
+      </div>
+
+      <div>
+        <%= f.label :loaner_car_id, "代車選択", class: "form-label" %>
+        <%= f.collection_select :loaner_car_id, @loaner_cars, :id, :name, {}, class: "form-select" %>
+      </div>
+
+      <div data-controller="date-range">
+        <label class="form-label">貸出期間</label>
+        <input type="text" class="form-input" placeholder="開始日 〜 終了日"
+               data-date-range-target="display" readonly style="cursor:pointer;">
+        <%= f.hidden_field :start_date, data: { "date-range-target": "startDate" } %>
+        <%= f.hidden_field :end_date,   data: { "date-range-target": "endDate" } %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "更新する", class: "btn-primary" %>
+        <%= link_to "戻る", rental_path(@rental), class: "btn-outline" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

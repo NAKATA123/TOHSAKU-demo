@@ -9,7 +9,7 @@ class PushSubscription < ApplicationRecord
     }
     payload = JSON.generate({ title: title, body: body })
 
-    admin_user_ids = User.where(admin: true).pluck(:id)
+    admin_user_ids = User.admin.pluck(:id)
     where(user_id: admin_user_ids).find_each do |sub|
       WebPush.payload_send(
         message:  payload,

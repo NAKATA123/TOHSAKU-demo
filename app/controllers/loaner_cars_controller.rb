@@ -4,7 +4,7 @@ class LoanerCarsController < ApplicationController
 
   # 一覧（タブ切り替え＋グリッド）
   def index
-    @loaner_cars = LoanerCar.all.order(created_at: :desc)
+    @loaner_cars = LoanerCar.includes(:rentals).order(created_at: :desc)
     today = Time.zone.today
 
     # グリッド用（2週間）
@@ -32,6 +32,9 @@ class LoanerCarsController < ApplicationController
       .where("start_date <= ? AND end_date >= ?", month_end, month_start)
       .order(start_date: :desc)
       .page(params[:history_page]).per(100)
+
+    # 駐車場別グループ
+    @cars_by_lot = @loaner_cars.group_by { |c| c.parking_lot.presence || "未設定" }
 
     # 貸出予定
     @upcoming_sort = params[:upcoming_sort] == "date" ? "date" : "created"
@@ -80,6 +83,6 @@ class LoanerCarsController < ApplicationController
   end
 
   def loaner_car_params
-    params.require(:loaner_car).permit(:name, :car_number, :shaken_expiry_date)
+    params.require(:loaner_car).permit(:name, :car_number, :parking_lot)
   end
 end

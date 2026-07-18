@@ -34,26 +34,6 @@
       </div>
 
       <div>
-        <%= f.label :email, "メールアドレス", class: "form-label" %>
-        <%= f.email_field :email,
-              class: "form-input",
-              placeholder: "example@email.com" %>
-      </div>
-
-      <div>
-        <%= f.label :password, "パスワード", class: "form-label" %>
-        <%= f.password_field :password,
-              class: "form-input",
-              placeholder: "6文字以上" %>
-      </div>
-
-      <div>
-        <%= f.label :password_confirmation, "パスワード（確認）", class: "form-label" %>
-        <%= f.password_field :password_confirmation,
-              class: "form-input" %>
-      </div>
-
-      <div>
         <%= f.label :role, "権限", class: "form-label" %>
         <%= f.select :role,
               [["従業員", "employee"], ["管理者", "admin"]],

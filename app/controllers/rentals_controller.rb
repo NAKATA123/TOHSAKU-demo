@@ -41,6 +41,21 @@ class RentalsController < ApplicationController
                     .find(params[:id])
   end
 
+  def edit
+    @rental = Rental.find(params[:id])
+    @loaner_cars = LoanerCar.all
+  end
+
+  def update
+    @rental = Rental.find(params[:id])
+    if @rental.update(rental_params)
+      redirect_to rental_path(@rental), notice: "貸出情報を更新しました"
+    else
+      @loaner_cars = LoanerCar.all
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     rental = Rental.find(params[:id])
     rental.destroy
@@ -55,7 +70,8 @@ class RentalsController < ApplicationController
       :repair_id,
       :start_date,
       :end_date,
-      :customer_name
+      :customer_name,
+      :reason
     )
   end
 end

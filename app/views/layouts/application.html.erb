@@ -9,10 +9,19 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <meta name="vapid-public-key" content="<%= ENV['VAPID_PUBLIC_KEY'] %>">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TOHSAKU">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta name="theme-color" content="#0a1a20">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
   </head>
 
   <body>
@@ -45,7 +54,6 @@
           <% if current_user&.admin? %>
             <button id="push-toggle-btn" class="push-btn" data-subscribed="false">🔕 通知OFF</button>
           <% end %>
-          <%= link_to "🔑", edit_password_path, class: "header-icon-btn", title: "パスワード変更" %>
           <%= button_to "ログアウト", logout_path, method: :delete, class: "logout-btn" %>
         </div>
 

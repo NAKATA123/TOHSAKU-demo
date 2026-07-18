@@ -14,7 +14,7 @@
     <thead>
       <tr>
         <th>名前</th>
-        <th>メールアドレス</th>
+        <th>社員番号</th>
         <th>権限</th>
         <th></th>
       </tr>
@@ -23,7 +23,7 @@
       <% @users.each do |user| %>
         <tr>
           <td><%= user.name %></td>
-          <td><%= user.email %></td>
+          <td><%= user.employee_number %></td>
           <td>
             <% if user.admin? %>
               <span class="status-badge working">管理者</span>
@@ -37,7 +37,7 @@
               <%= button_to "削除",
                     user_path(user),
                     method: :delete,
-                    data: { turbo_confirm: "#{user.name || user.email} を削除しますか？" },
+                    data: { turbo_confirm: "#{user.name} を削除しますか？" },
                     class: "btn-danger" %>
             <% else %>
               <span class="muted">（自分）</span>

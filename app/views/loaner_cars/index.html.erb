@@ -21,6 +21,13 @@
     </button>
 
     <button class="tab-btn"
+        data-tab="parking"
+        data-loaner-calendar-target="tab"
+        data-action="click->loaner-calendar#switch">
+      駐車場
+    </button>
+
+    <button class="tab-btn"
         data-tab="history"
         data-loaner-calendar-target="tab"
         data-action="click->loaner-calendar#switch">
@@ -43,6 +50,7 @@
         <tr>
           <th>名前</th>
           <th>ナンバー</th>
+          <th>駐車場</th>
         </tr>
       </thead>
       <tbody>
@@ -50,6 +58,12 @@
           <tr class="table-row-link" onclick="location.href='<%= edit_loaner_car_path(car) %>'">
             <td><%= car.name %></td>
             <td><%= car.car_number %></td>
+            <td>
+              <% lot = car.parking_lot.presence || "未設定" %>
+              <span class="parking-badge parking-<%= lot %>">
+                <%= LoanerCar::PARKING_LOTS[lot] || "未設定" %>
+              </span>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -94,31 +108,33 @@
     </div>
 
     <% if @upcoming_rentals.any? %>
-      <table class="repair-table">
-        <thead>
-          <tr>
-            <th>代車</th>
-            <th>期間</th>
-            <th>顧客</th>
-            <th>登録日時</th>
-            <th>登録者</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @upcoming_rentals.each do |r| %>
-            <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
-              <td><%= r.loaner_car.name %></td>
-              <td>
-                <%= r.start_date.strftime("%Y/%m/%d") %> 〜
-                <%= r.end_date.strftime("%Y/%m/%d") %>
-              </td>
-              <td><%= r.customer_name.presence || r.repair&.car&.customer&.name || "顧客情報なし" %></td>
-              <td class="muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
-              <td><%= r.created_by&.name || "-" %></td>
+      <div class="table-scroll">
+        <table class="repair-table">
+          <thead>
+            <tr>
+              <th>代車</th>
+              <th>期間</th>
+              <th>顧客</th>
+              <th class="col-meta">登録日時</th>
+              <th class="col-meta">登録者</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @upcoming_rentals.each do |r| %>
+              <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
+                <td><%= r.loaner_car.name %></td>
+                <td style="white-space:nowrap">
+                  <span class="col-meta"><%= r.start_date.strftime("%Y/") %></span><%= r.start_date.strftime("%m/%d") %> 〜
+                  <span class="col-meta"><%= r.end_date.strftime("%Y/") %></span><%= r.end_date.strftime("%m/%d") %>
+                </td>
+                <td><%= r.customer_name.presence || r.repair&.car&.customer&.name || "顧客情報なし" %></td>
+                <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+                <td class="col-meta"><%= r.created_by&.name || "-" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     <% else %>
       <div class="card empty-state"><p class="muted">貸出予定はありません。</p></div>
     <% end %>
@@ -162,8 +178,11 @@
           <% if @loaner_cars.any? %>
             <% @loaner_cars.each do |car| %>
               <tr>
-                <td class="loaner-grid-car">
+                <td class="loaner-grid-car loaner-grid-car--<%= car.parking_lot.presence || 'none' %>">
                   <%= link_to car.name, new_rental_path(loaner_car_id: car.id, tab: "grid"), class: "loaner-grid-car-link" %>
+                  <% if car.parking_lot.present? %>
+                    <span style="display:block; font-size:10px; font-weight:600; color:#94a3b8; margin-top:2px;"><%= LoanerCar::PARKING_LOTS[car.parking_lot] %></span>
+                  <% end %>
                 </td>
                 <%
                   rentals_for_car = (@rental_by_car[car.id] || [])
@@ -178,10 +197,10 @@
                 %>
                         <td colspan="<%= span_dates.size %>" class="loaner-grid-rented">
                           <%= link_to rental_path(rental), class: "loaner-grid-rental-link" do %>
-                            <span class="grid-rental-status">貸出中</span>
                             <% display_name = rental.customer_name.presence || rental.repair&.car&.customer&.name %>
-                            <% if display_name %>
-                              <span class="grid-rental-customer"><%= display_name %></span>
+                            <span class="grid-rental-status"><%= display_name.presence || "貸出中" %></span>
+                            <% if rental.reason.present? %>
+                              <span class="grid-rental-customer"><%= rental.reason %></span>
                             <% end %>
                           <% end %>
                         </td>
@@ -209,6 +228,61 @@
         </tbody>
       </table>
     </div>
+
+  </div>
+
+  <%# ===== 駐車場タブ ===== %>
+  <div id="tab-parking"
+       class="tab-content"
+       data-panel="parking"
+       data-loaner-calendar-target="panel">
+
+    <% today = Time.zone.today %>
+    <% (LoanerCar::PARKING_LOTS.keys + ["未設定"]).each do |lot| %>
+      <% cars = @cars_by_lot[lot] || [] %>
+      <div class="parking-lot-section">
+        <div class="parking-lot-header">
+          <span class="parking-badge parking-<%= lot %>">
+            <%= LoanerCar::PARKING_LOTS[lot] || "未設定" %>
+          </span>
+          <span class="parking-lot-count"><%= cars.size %>台</span>
+        </div>
+
+        <% if cars.any? %>
+          <table class="repair-table">
+            <thead>
+              <tr>
+                <th>代車名</th>
+                <th>ナンバー</th>
+                <th>状況</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cars.each do |car| %>
+                <% active_rental = car.rentals.find { |r| r.start_date <= today && r.end_date >= today } %>
+                <tr>
+                  <td><%= car.name %></td>
+                  <td><%= car.car_number %></td>
+                  <td>
+                    <% if active_rental %>
+                      <span class="status-badge working">貸出中</span>
+                    <% else %>
+                      <span class="status-badge completed">空き</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= link_to "場所変更", edit_loaner_car_path(car), class: "btn-outline btn-sm" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="card empty-state"><p class="muted">この駐車場に登録された代車はありません</p></div>
+        <% end %>
+      </div>
+    <% end %>
 
   </div>
 

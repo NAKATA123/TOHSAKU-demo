@@ -31,7 +31,9 @@
 </div>
 
 <% if @repairs.any? %>
-  <table class="repair-table">
+
+  <%# ===== PCテーブル ===== %>
+  <table class="repair-table repair-table--pc">
     <thead>
       <tr>
         <th>受付日</th>
@@ -42,23 +44,19 @@
         <th></th>
       </tr>
     </thead>
-
     <tbody>
       <% @repairs.each do |repair| %>
-        <tr>
+        <tr class="table-row-link" onclick="location.href='<%= repair_path(repair) %>'">
           <td><%= repair.received_at&.strftime("%Y/%m/%d") || "-" %></td>
           <td><%= repair.car.customer.name %></td>
-          <td>
-            <%= repair.car.car_model %>
-            (<%= repair.car.car_number %>)
-          </td>
+          <td><%= repair.car.car_model %>（<%= repair.car.car_number %>）</td>
           <td><%= truncate(repair.description, length: 20) %></td>
           <td>
             <span class="status-badge <%= repair.status %>">
               <%= t("enums.repair.status.#{repair.status}") %>
             </span>
           </td>
-          <td class="repair-actions">
+          <td class="repair-actions" onclick="event.stopPropagation()">
             <% if repair.next_status %>
               <%= button_to repair.next_status_label,
                     update_status_repair_path(repair),
@@ -72,6 +70,37 @@
       <% end %>
     </tbody>
   </table>
+
+  <%# ===== スマホカード ===== %>
+  <div class="repair-cards">
+    <% @repairs.each do |repair| %>
+      <a href="<%= repair_path(repair) %>" class="repair-card">
+        <div class="repair-card-header">
+          <div>
+            <span class="repair-card-name"><%= repair.car.customer.name %></span>
+            <span class="repair-card-car"><%= repair.car.car_model %>（<%= repair.car.car_number %>）</span>
+          </div>
+          <span class="status-badge <%= repair.status %>">
+            <%= t("enums.repair.status.#{repair.status}") %>
+          </span>
+        </div>
+        <% if repair.description.present? %>
+          <div class="repair-card-desc"><%= truncate(repair.description, length: 40) %></div>
+        <% end %>
+        <div class="repair-card-footer">
+          <span class="muted"><%= repair.received_at&.strftime("%Y/%m/%d") || "受付日未登録" %></span>
+          <% if repair.next_status %>
+            <%= button_to repair.next_status_label,
+                  update_status_repair_path(repair),
+                  method: :patch,
+                  params: { status: repair.next_status },
+                  class: "btn-status-next btn-status-#{repair.next_status}",
+                  form: { "data-turbo" => "false" } %>
+          <% end %>
+        </div>
+      </a>
+    <% end %>
+  </div>
 
   <%= paginate @repairs %>
 <% else %>

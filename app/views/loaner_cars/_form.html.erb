@@ -9,6 +9,14 @@
     <%= f.text_field :car_number, class: "form-input" %>
   </div>
 
+  <div>
+    <%= f.label :parking_lot, "駐車場", class: "form-label" %>
+    <%= f.select :parking_lot,
+          LoanerCar::PARKING_LOTS.map { |k, v| [v, k] },
+          { include_blank: "未設定" },
+          class: "form-select" %>
+  </div>
+
   <div class="form-actions">
     <%= f.submit @loaner_car.new_record? ? "登録する" : "更新する", class: "btn-primary" %>
     <%= link_to "戻る", loaner_cars_path, class: "btn-outline" %>

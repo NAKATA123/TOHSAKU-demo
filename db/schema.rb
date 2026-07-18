@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_07_18_142104) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_18_144132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_18_142104) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "shaken_expiry_date"
+    t.string "parking_lot"
   end
 
   create_table "notices", force: :cascade do |t|
@@ -67,6 +68,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_18_142104) do
     t.datetime "updated_at", null: false
     t.bigint "created_by_id"
     t.string "customer_name"
+    t.string "reason"
     t.index ["created_by_id"], name: "index_rentals_on_created_by_id"
     t.index ["loaner_car_id"], name: "index_rentals_on_loaner_car_id"
     t.index ["repair_id"], name: "index_rentals_on_repair_id"

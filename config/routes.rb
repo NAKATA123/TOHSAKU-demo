@@ -20,12 +20,11 @@ Rails.application.routes.draw do
     resources :rentals, only: [:index]
   end
 
-  resources :rentals, only: [:new, :create, :show, :destroy]
+  resources :rentals, only: [:new, :create, :show, :edit, :update, :destroy]
 
   resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
 
   resources :notices, only: [:create, :update]
   resources :push_subscriptions, only: [:create, :destroy]
 
-  resource :password, only: [:edit, :update]
 end

@@ -39,13 +39,16 @@
     </div>
 
     <div>
-      <%= f.label :start_date, "開始日", class: "form-label" %>
-      <%= f.date_field :start_date, class: "form-input" %>
+      <%= f.label :reason, "理由", class: "form-label" %>
+      <%= f.text_field :reason, class: "form-input", placeholder: "例：車検、修理、点検" %>
     </div>
 
-    <div>
-      <%= f.label :end_date, "終了日", class: "form-label" %>
-      <%= f.date_field :end_date, class: "form-input" %>
+    <div data-controller="date-range">
+      <label class="form-label">貸出期間</label>
+      <input type="text" class="form-input" placeholder="開始日 〜 終了日"
+             data-date-range-target="display" readonly style="cursor:pointer;">
+      <%= f.hidden_field :start_date, data: { "date-range-target": "startDate" } %>
+      <%= f.hidden_field :end_date,   data: { "date-range-target": "endDate" } %>
     </div>
 
     <div class="form-actions">

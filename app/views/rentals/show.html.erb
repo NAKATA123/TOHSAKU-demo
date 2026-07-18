@@ -1,22 +1,32 @@
 <div class="page-container">
-  <h1 class="page-title">貸出詳細</h1>
+  <div class="page-header">
+    <h1 class="page-title">貸出詳細</h1>
+    <div class="page-actions">
+      <%= link_to "編集", edit_rental_path(@rental), class: "btn-primary" %>
+      <%= link_to "戻る", loaner_cars_path(tab: "grid"), class: "btn-outline" %>
+      <%= link_to "削除", rental_path(@rental),
+            data: { turbo_method: :delete, turbo_confirm: "この貸出を削除しますか？" },
+            class: "btn-danger" %>
+    </div>
+  </div>
 
   <table class="repair-table">
     <tr>
       <th>代車</th>
       <td><%= @rental.loaner_car.name %></td>
     </tr>
-
     <tr>
       <th>ナンバー</th>
       <td><%= @rental.loaner_car.car_number %></td>
     </tr>
-
     <tr>
       <th>顧客</th>
       <td><%= @rental.customer_name.presence || @rental.repair&.car&.customer&.name || "顧客情報なし" %></td>
     </tr>
-
+    <tr>
+      <th>理由</th>
+      <td><%= @rental.reason.presence || "-" %></td>
+    </tr>
     <tr>
       <th>期間</th>
       <td>
@@ -25,12 +35,9 @@
         <%= @rental.end_date.strftime("%Y/%m/%d") %>
       </td>
     </tr>
+    <tr>
+      <th>登録者</th>
+      <td><%= @rental.created_by&.name || "-" %></td>
+    </tr>
   </table>
-
-  <div style="margin-top: 20px;">
-    <%= link_to "戻る", loaner_cars_path, class: "btn-outline" %>
-    <%= link_to "削除", rental_path(@rental),
-          data: { turbo_method: :delete, turbo_confirm: "この貸出を削除しますか？" },
-          class: "btn-danger" %>
-  </div>
 </div>

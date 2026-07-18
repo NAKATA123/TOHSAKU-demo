@@ -587,93 +587,6 @@ body {
 .list-action  { margin: 20px 0; }
 .section-divider { margin: 40px 0; border: none; border-top: 1px solid #e2e8f0; }
 
-/* ===== 車検アナウンス ===== */
-
-.shaken-alert {
-  background: #fff;
-  border: 1px solid #fca5a5;
-  border-left: 4px solid #ef4444;
-  border-radius: 10px;
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.shaken-alert-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.shaken-alert-icon  { font-size: 16px; }
-.shaken-alert-title { font-weight: 800; font-size: 14px; color: #991b1b; flex: 1; }
-
-.shaken-alert-count {
-  font-size: 12px;
-  font-weight: 700;
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
-  padding: 2px 8px;
-  border-radius: 999px;
-}
-
-.shaken-alert-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.shaken-alert-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  background: #fffbeb;
-  border-radius: 7px;
-  font-size: 13px;
-  flex-wrap: wrap;
-}
-
-.shaken-alert-name { font-weight: 700; color: #1a6570; min-width: 80px; text-decoration: none; }
-.shaken-alert-name:hover { text-decoration: underline; }
-.shaken-alert-car  { color: #475569; flex: 1; }
-.shaken-alert-date { color: #64748b; font-size: 12px; }
-
-.shaken-edit-btn {
-  margin-left: auto;
-  font-size: 12px;
-  font-weight: 700;
-  color: #92400e;
-  background: #fef3c7;
-  border: 1px solid #fbbf24;
-  padding: 3px 10px;
-  border-radius: 6px;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: 0.15s;
-}
-
-.shaken-edit-btn:hover { background: #fde68a; }
-
-.shaken-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-
-.shaken-expired { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
-.shaken-soon    { background: #fff7ed; color: #ea580c; border: 1px solid #fdba74; }
-.shaken-warning { background: #fefce8; color: #ca8a04; border: 1px solid #fde047; }
-
 /* ===== Dashboard Notice ===== */
 
 .today-notice {
@@ -1319,14 +1232,160 @@ body {
   text-decoration: underline;
 }
 
+/* ===== Flatpickr カスタマイズ ===== */
+
+.flatpickr-calendar {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+  border: 1px solid #e2e8f0 !important;
+  font-family: 'Inter', 'IBM Plex Sans JP', sans-serif !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: #0a1a20 !important;
+  border-color: #0a1a20 !important;
+}
+
+.flatpickr-day.inRange {
+  background: rgba(0,210,190,0.15) !important;
+  border-color: rgba(0,210,190,0.15) !important;
+  box-shadow: -5px 0 0 rgba(0,210,190,0.15), 5px 0 0 rgba(0,210,190,0.15) !important;
+}
+
+.flatpickr-day.today {
+  border-color: #00d2be !important;
+}
+
+.flatpickr-day:hover {
+  background: #f0f9fa !important;
+  border-color: #f0f9fa !important;
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-weekdays,
+span.flatpickr-weekday {
+  background: #0a1a20 !important;
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  color: #fff !important;
+}
+
+/* ===== 駐車場カラー ===== */
+
+.parking-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.parking-A { background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; }
+.parking-B { background: #fef9c3; color: #a16207; border: 1.5px solid #fde047; }
+.parking-C { background: #dbeafe; color: #1d4ed8; border: 1.5px solid #93c5fd; }
+.parking-未設定 { background: #f1f5f9; color: #94a3b8; border: 1.5px solid #e2e8f0; }
+
+.loaner-grid-car--A { border-left: 4px solid #22c55e !important; }
+.loaner-grid-car--B { border-left: 4px solid #eab308 !important; }
+.loaner-grid-car--C { border-left: 4px solid #3b82f6 !important; }
+
+.parking-lot-section { margin-bottom: 28px; }
+
+.parking-lot-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.parking-lot-count {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* ===== Repair Cards (mobile-only) ===== */
+
+.repair-cards { display: none; }
+
+.repair-card {
+  display: block;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: box-shadow 0.15s;
+}
+.repair-card:active { box-shadow: 0 0 0 2px #00d2be; }
+
+.repair-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.repair-card-name { font-weight: 700; font-size: 15px; display: block; }
+.repair-card-car  { font-size: 12px; color: #64748b; display: block; margin-top: 2px; }
+.repair-card-desc { font-size: 13px; color: #475569; margin: 6px 0 0; }
+.repair-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 /* ===== Mobile ===== */
 
 @media (max-width: 640px) {
+  .header-inner {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0 14px;
+    gap: 0;
+  }
+  .brand        { order: 1; padding: 10px 0; }
+  .header-right { order: 2; margin-left: auto; gap: 6px; }
+  .push-btn     { display: none; }
+  .header-divider { display: none; }
+  .nav {
+    order: 3;
+    width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    padding: 6px 0;
+    gap: 0;
+    flex: none;
+  }
+  .nav-flag { display: none; }
+  .nav-link { font-size: 12px; padding: 6px 12px; }
+
   .brand-name     { display: none; }
-  .header-divider { margin: 0 12px; }
-  .nav-flag       { display: none; }
   .detail-list    { grid-template-columns: 1fr; }
   .page-actions,
   .section-header .page-actions { width: 100%; }
-  .repair-table   { display: block; overflow-x: auto; white-space: nowrap; }
+  .table-scroll                  { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-scroll .repair-table    { width: auto; min-width: 100%; }
+  .table-scroll .repair-table td,
+  .table-scroll .repair-table th { white-space: nowrap; }
+  .repair-table--pc { display: none; }
+  .repair-cards     { display: flex; flex-direction: column; gap: 10px; }
+  .col-meta         { display: none; }
+  .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; }
 }
