@@ -44,25 +44,6 @@
         <p class="detail-value"><%= @car.car_number %></p>
       </div>
 
-      <div class="detail-row">
-        <p class="detail-label">車検期限</p>
-        <p class="detail-value">
-          <% if @car.shaken_expiry_date %>
-            <%= @car.shaken_expiry_date.strftime("%Y年%m月%d日") %>
-            <% days = (@car.shaken_expiry_date - Time.zone.today).to_i %>
-            <% if days < 0 %>
-              <span class="shaken-badge shaken-expired">期限切れ</span>
-            <% elsif days <= 30 %>
-              <span class="shaken-badge shaken-soon">あと<%= days %>日</span>
-            <% else %>
-              <span class="shaken-badge shaken-warning">あと<%= days %>日</span>
-            <% end %>
-          <% else %>
-            <span class="muted">未登録</span>
-          <% end %>
-        </p>
-      </div>
-
     </div>
   </div>
 

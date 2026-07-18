@@ -31,62 +31,6 @@
   </div>
 </div>
 
-<% if @expiring_cars.any? %>
-  <div class="shaken-alert">
-    <div class="shaken-alert-header">
-      <span class="shaken-alert-icon">⚠️</span>
-      <span class="shaken-alert-title">車検期限のお知らせ</span>
-      <span class="shaken-alert-count"><%= @expiring_cars.size %>件</span>
-    </div>
-    <ul class="shaken-alert-list">
-      <% @expiring_cars.each do |car| %>
-        <% days = (car.shaken_expiry_date - Time.zone.today).to_i %>
-        <li class="shaken-alert-item">
-          <%= link_to car.customer.name, customer_path(car.customer), class: "shaken-alert-name" %>
-          <span class="shaken-alert-car"><%= car.car_model %>（<%= car.car_number %>）</span>
-          <span class="shaken-alert-date"><%= car.shaken_expiry_date.strftime("%Y/%m/%d") %></span>
-          <% if days < 0 %>
-            <span class="shaken-badge shaken-expired">期限切れ</span>
-          <% elsif days <= 30 %>
-            <span class="shaken-badge shaken-soon">あと<%= days %>日</span>
-          <% else %>
-            <span class="shaken-badge shaken-warning">あと<%= days %>日</span>
-          <% end %>
-          <%= link_to "更新", edit_customer_car_path(car.customer, car, from: "dashboard"), class: "shaken-edit-btn" %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
-<% if @expiring_loaner_cars.any? %>
-  <div class="shaken-alert">
-    <div class="shaken-alert-header">
-      <span class="shaken-alert-icon">⚠️</span>
-      <span class="shaken-alert-title">代車の車検期限のお知らせ</span>
-      <span class="shaken-alert-count"><%= @expiring_loaner_cars.size %>件</span>
-    </div>
-    <ul class="shaken-alert-list">
-      <% @expiring_loaner_cars.each do |car| %>
-        <% days = (car.shaken_expiry_date - Time.zone.today).to_i %>
-        <li class="shaken-alert-item">
-          <span class="shaken-alert-name" style="color:#0f172a; text-decoration:none;">🚗 <%= car.name %></span>
-          <span class="shaken-alert-car"><%= car.car_number %></span>
-          <span class="shaken-alert-date"><%= car.shaken_expiry_date.strftime("%Y/%m/%d") %></span>
-          <% if days < 0 %>
-            <span class="shaken-badge shaken-expired">期限切れ</span>
-          <% elsif days <= 30 %>
-            <span class="shaken-badge shaken-soon">あと<%= days %>日</span>
-          <% else %>
-            <span class="shaken-badge shaken-warning">あと<%= days %>日</span>
-          <% end %>
-          <%= link_to "更新", edit_loaner_car_path(car), class: "shaken-edit-btn" %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
 <h2 class="section-title">修理状況</h2>
 <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:32px;">
   <%= link_to repairs_path(status: :reception), class: "card stat-card" do %>

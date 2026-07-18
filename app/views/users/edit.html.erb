@@ -23,6 +23,14 @@
       </div>
 
       <div>
+        <%= f.label :employee_number, "社員番号（誕生日4桁）", class: "form-label" %>
+        <%= f.text_field :employee_number, class: "form-input",
+              placeholder: "例：0818",
+              maxlength: 4,
+              inputmode: "numeric" %>
+      </div>
+
+      <div>
         <%= f.label :email, "メールアドレス", class: "form-label" %>
         <%= f.email_field :email, class: "form-input" %>
       </div>

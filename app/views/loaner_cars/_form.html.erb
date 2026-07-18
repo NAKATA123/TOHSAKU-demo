@@ -9,11 +9,6 @@
     <%= f.text_field :car_number, class: "form-input" %>
   </div>
 
-  <div>
-    <%= f.label :shaken_expiry_date, "車検期限", class: "form-label" %>
-    <%= f.date_field :shaken_expiry_date, class: "form-input" %>
-  </div>
-
   <div class="form-actions">
     <%= f.submit @loaner_car.new_record? ? "登録する" : "更新する", class: "btn-primary" %>
     <%= link_to "戻る", loaner_cars_path, class: "btn-outline" %>
