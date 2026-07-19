@@ -99,7 +99,7 @@
       <div class="sort-toggle">
         <%= link_to "直近順", loaner_cars_path(upcoming_sort: "date", tab: "list"),
               class: "sort-btn #{'active' if @upcoming_sort == 'date'}" %>
-        <%= link_to "登録順", loaner_cars_path(upcoming_sort: "created", tab: "list"),
+        <%= link_to "新着順", loaner_cars_path(upcoming_sort: "created", tab: "list"),
               class: "sort-btn #{'active' if @upcoming_sort == 'created'}" %>
       </div>
     </div>
