@@ -88,7 +88,7 @@
               <%= r.end_date.strftime("%Y/%m/%d") %>
             </td>
             <td>
-              <%= r.customer_name.presence || r.repair&.car&.customer&.name || "顧客情報なし" %>
+              <%= r.customer_name.presence || r.repair&.customer_name || "顧客情報なし" %>
             </td>
           </tr>
         <% end %>
@@ -127,7 +127,7 @@
                   <span class="col-meta"><%= r.start_date.strftime("%Y/") %></span><%= r.start_date.strftime("%m/%d") %> 〜
                   <span class="col-meta"><%= r.end_date.strftime("%Y/") %></span><%= r.end_date.strftime("%m/%d") %>
                 </td>
-                <td><%= r.customer_name.presence || r.repair&.car&.customer&.name || "顧客情報なし" %></td>
+                <td><%= r.customer_name.presence || r.repair&.customer_name || "顧客情報なし" %></td>
                 <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
                 <td class="col-meta"><%= r.created_by&.name || "-" %></td>
               </tr>
@@ -197,7 +197,7 @@
                 %>
                         <td colspan="<%= span_dates.size %>" class="loaner-grid-rented">
                           <%= link_to rental_path(rental), class: "loaner-grid-rental-link" do %>
-                            <% display_name = rental.customer_name.presence || rental.repair&.car&.customer&.name %>
+                            <% display_name = rental.customer_name.presence || rental.repair&.customer_name %>
                             <span class="grid-rental-status"><%= display_name.presence || "貸出中" %></span>
                             <% if rental.reason.present? %>
                               <span class="grid-rental-customer"><%= rental.reason %></span>
@@ -320,7 +320,7 @@
           <% @all_rentals.each do |rental| %>
             <tr class="table-row-link" onclick="location.href='<%= rental_path(rental) %>'">
               <td><%= rental.loaner_car.name %></td>
-              <td><%= rental.customer_name.presence || rental.repair&.car&.customer&.name || "顧客情報なし" %></td>
+              <td><%= rental.customer_name.presence || rental.repair&.customer_name || "顧客情報なし" %></td>
               <td><%= rental.start_date.strftime("%Y/%m/%d") %></td>
               <td><%= rental.end_date.strftime("%Y/%m/%d") %></td>
               <td class="muted"><%= rental.created_at.strftime("%Y/%m/%d %H:%M") %></td>

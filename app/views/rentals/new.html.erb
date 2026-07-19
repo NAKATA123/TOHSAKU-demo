@@ -11,12 +11,12 @@
   </div>
 <% end %>
 
-<% if @repair.present? && @repair.car.present? %>
+<% if @repair.present? %>
   <div class="card card-mb">
-    <p><strong>顧客名:</strong> <%= @repair.car.customer.name %></p>
+    <p><strong>顧客名:</strong> <%= @repair.customer_name %></p>
     <p>
       <strong>車両:</strong>
-      <%= @repair.car.car_model %>（<%= @repair.car.car_number %>）
+      <%= @repair.car_model %>（<%= @repair.car_number %>）
     </p>
   </div>
 <% end %>

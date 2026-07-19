@@ -40,7 +40,7 @@
         <% @rentals.each do |rental| %>
           <tr>
             <td><%= rental.loaner_car.name %></td>
-            <td><%= rental.customer_name.presence || rental.repair&.car&.customer&.name || "顧客情報なし" %></td>
+            <td><%= rental.customer_name.presence || rental.repair&.customer_name || "顧客情報なし" %></td>
             <td>
               <%= rental.repair&.car&.car_model %>
               （<%= rental.repair&.car&.car_number %>）

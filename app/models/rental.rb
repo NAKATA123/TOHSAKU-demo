@@ -11,7 +11,7 @@ class Rental < ApplicationRecord
   private
 
   def notify_push
-    customer = customer_name.presence || repair&.car&.customer&.name || "顧客情報なし"
+    customer = customer_name.presence || repair&.customer_name || "顧客情報なし"
     PushSubscription.broadcast_to_all(
       title: "代車貸出が登録されました",
       body:  "#{loaner_car.name} → #{customer}（#{start_date.strftime('%m/%d')}〜#{end_date.strftime('%m/%d')}）"

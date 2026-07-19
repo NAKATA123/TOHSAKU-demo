@@ -1,8 +1,9 @@
 class Repair < ApplicationRecord
-  belongs_to :car
   has_many :rentals, dependent: :destroy
 
   enum status: { reception: 0, working: 1, completed: 2 }
+
+  validates :customer_name, presence: true
 
   def next_status
     { "reception" => "working", "working" => "completed" }[status]

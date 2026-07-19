@@ -1,10 +1,10 @@
 <h1 class="page-title">修理詳細</h1>
 
 <div class="card card-mb">
-  <p><strong>顧客名:</strong> <%= @repair.car.customer.name %></p>
+  <p><strong>顧客名:</strong> <%= @repair.customer_name %></p>
   <p>
     <strong>車両:</strong>
-    <%= @repair.car.car_model %>（<%= @repair.car.car_number %>）
+    <%= @repair.car_model %>（<%= @repair.car_number %>）
   </p>
   <p class="repair-status-row">
     <strong>ステータス:</strong>

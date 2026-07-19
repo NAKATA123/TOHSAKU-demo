@@ -13,13 +13,13 @@ class LoanerCarsController < ApplicationController
     @grid_dates = (@grid_start..@grid_end).to_a
 
     grid_rentals = Rental
-      .includes(repair: { car: :customer })
+      .includes(:repair)
       .where("start_date <= ? AND end_date >= ?", @grid_end, @grid_start)
     @rental_by_car = grid_rentals.group_by(&:loaner_car_id)
 
     # 貸出中
     @current_rentals = Rental
-      .includes(:loaner_car, repair: { car: :customer })
+      .includes(:loaner_car, :repair)
       .where("start_date <= ? AND end_date >= ?", today, today)
       .order(:start_date)
 
@@ -28,7 +28,7 @@ class LoanerCarsController < ApplicationController
     month_start = Date.parse("#{@history_month}-01")
     month_end   = month_start.end_of_month
     @all_rentals = Rental
-      .includes(:loaner_car, :created_by, repair: { car: :customer })
+      .includes(:loaner_car, :created_by, :repair)
       .where("start_date <= ? AND end_date >= ?", month_end, month_start)
       .order(start_date: :desc)
       .page(params[:history_page]).per(100)
@@ -40,7 +40,7 @@ class LoanerCarsController < ApplicationController
     @upcoming_sort = params[:upcoming_sort] == "date" ? "date" : "created"
     upcoming_order = @upcoming_sort == "date" ? { start_date: :asc } : { created_at: :desc }
     @upcoming_rentals = Rental
-      .includes(:loaner_car, :created_by, repair: { car: :customer })
+      .includes(:loaner_car, :created_by, :repair)
       .where("start_date > ?", today)
       .order(upcoming_order)
   end

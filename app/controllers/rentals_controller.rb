@@ -28,16 +28,16 @@ class RentalsController < ApplicationController
     if params[:loaner_car_id]
       @loaner_car = LoanerCar.find(params[:loaner_car_id])
       @rentals = @loaner_car.rentals
-                             .includes(repair: { car: :customer }, created_by: {})
+                             .includes(:repair, created_by: {})
                              .order(created_at: :desc)
     else
-      @rentals = Rental.includes(repair: { car: :customer }, loaner_car: {}, created_by: {})
+      @rentals = Rental.includes(:repair, loaner_car: {}, created_by: {})
                        .order(created_at: :desc)
     end
   end
 
   def show
-    @rental = Rental.includes(:loaner_car, repair: { car: :customer })
+    @rental = Rental.includes(:loaner_car, :repair)
                     .find(params[:id])
   end
 

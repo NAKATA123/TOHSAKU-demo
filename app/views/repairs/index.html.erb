@@ -5,6 +5,9 @@
       修理一覧
     </h1>
   </div>
+  <div class="page-actions">
+    <%= link_to "＋修理登録", new_repair_path, class: "btn-primary" %>
+  </div>
 </div>
 
 <div class="status-filter">
@@ -48,8 +51,8 @@
       <% @repairs.each do |repair| %>
         <tr class="table-row-link" onclick="location.href='<%= repair_path(repair) %>'">
           <td><%= repair.received_at&.strftime("%Y/%m/%d") || "-" %></td>
-          <td><%= repair.car.customer.name %></td>
-          <td><%= repair.car.car_model %>（<%= repair.car.car_number %>）</td>
+          <td><%= repair.customer_name %></td>
+          <td><%= repair.car_model %>（<%= repair.car_number %>）</td>
           <td><%= truncate(repair.description, length: 20) %></td>
           <td>
             <span class="status-badge <%= repair.status %>">
@@ -77,8 +80,8 @@
       <a href="<%= repair_path(repair) %>" class="repair-card">
         <div class="repair-card-header">
           <div>
-            <span class="repair-card-name"><%= repair.car.customer.name %></span>
-            <span class="repair-card-car"><%= repair.car.car_model %>（<%= repair.car.car_number %>）</span>
+            <span class="repair-card-name"><%= repair.customer_name %></span>
+            <span class="repair-card-car"><%= repair.car_model %>（<%= repair.car_number %>）</span>
           </div>
           <span class="status-badge <%= repair.status %>">
             <%= t("enums.repair.status.#{repair.status}") %>

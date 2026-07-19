@@ -1,17 +1,22 @@
 <h1 class="page-title">修理登録</h1>
 
-<div class="card" style="margin-bottom:20px;">
-  <p><strong>顧客名:</strong> <%= @car.customer.name %></p>
-  <p>
-    <strong>車両:</strong>
-    <%= @car.car_model %>（<%= @car.car_number %>）
-  </p>
-</div>
-
 <div class="card">
-  <%= form_with model: @repair,
-                url: customer_car_repairs_path(@car.customer, @car),
-                local: true do |f| %>
+  <%= form_with model: @repair, local: true do |f| %>
+
+    <div>
+      <%= f.label :customer_name, "顧客名", class: "form-label" %>
+      <%= f.text_field :customer_name, class: "form-input", placeholder: "例：田中 太郎" %>
+    </div>
+
+    <div>
+      <%= f.label :car_model, "車種", class: "form-label" %>
+      <%= f.text_field :car_model, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :car_number, "ナンバー", class: "form-label" %>
+      <%= f.text_field :car_number, class: "form-input" %>
+    </div>
 
     <div>
       <%= f.label :description, "修理内容", class: "form-label" %>

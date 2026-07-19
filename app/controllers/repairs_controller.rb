@@ -9,23 +9,21 @@ class RepairsController < ApplicationController
       working:   Repair.working.count,
       completed: Repair.completed.count
     }
-    @repairs = Repair.includes(car: :customer).order(created_at: :desc)
+    @repairs = Repair.order(created_at: :desc)
     @repairs = @repairs.where(status: @status_filter) if @status_filter
     @repairs = @repairs.page(params[:page]).per(15)
   end
 
   def show
-    @repair = Repair.includes(car: :customer).find(params[:id])
+    @repair = Repair.find(params[:id])
   end
 
   def new
-    @car = Car.find(params[:car_id])
-    @repair = @car.repairs.build(received_at: Time.zone.today)
+    @repair = Repair.new(received_at: Time.zone.today)
   end
 
   def create
-    @car = Car.find(params[:car_id])
-    @repair = @car.repairs.build(repair_params)
+    @repair = Repair.new(repair_params)
 
     if @repair.save
       redirect_to repair_path(@repair), notice: "修理を登録しました"
@@ -67,6 +65,6 @@ class RepairsController < ApplicationController
   private
 
   def repair_params
-    params.require(:repair).permit(:description, :status, :received_at, :completed_at)
+    params.require(:repair).permit(:customer_name, :car_model, :car_number, :description, :status, :received_at, :completed_at)
   end
 end

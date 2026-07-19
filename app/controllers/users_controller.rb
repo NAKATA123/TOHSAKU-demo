@@ -11,6 +11,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.email = "#{@user.employee_number}@tohsaku.local" if @user.email.blank?
     if @user.save
       redirect_to users_path, notice: "ユーザーを追加しました"
     else
