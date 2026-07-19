@@ -14,7 +14,6 @@ gem "web-push"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
-gem 'ransack', "~> 4.2"
 gem "kaminari"
 
 group :development, :test do

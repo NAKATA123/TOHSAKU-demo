@@ -861,66 +861,6 @@ body {
 .tab-content        { display: none; }
 .tab-content.active { display: block; }
 
-/* ===== Calendar ===== */
-
-#calendar {
-  background: #fff;
-  padding: 16px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05);
-
-  /* FullCalendar カラーカスタマイズ */
-  --fc-border-color: #e2e8f0;
-  --fc-today-bg-color: rgba(0,210,190,0.08);
-  --fc-event-bg-color: #0a1a20;
-  --fc-event-border-color: #1e8a9a;
-  --fc-event-text-color: #fff;
-  --fc-button-bg-color: #0a1a20;
-  --fc-button-border-color: #1e8a9a;
-  --fc-button-text-color: #fff;
-  --fc-button-hover-bg-color: #1e8a9a;
-  --fc-button-hover-border-color: #00d2be;
-  --fc-button-active-bg-color: #1e8a9a;
-  --fc-button-active-border-color: #00d2be;
-  --fc-highlight-color: rgba(0,210,190,0.15);
-}
-
-#calendar .fc-toolbar-title {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
-
-#calendar .fc-day-today .fc-daygrid-day-number {
-  background: #00d2be;
-  color: #0a1a20;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  text-align: center;
-  font-weight: 800;
-  padding: 0;
-}
-
-#calendar .fc-event {
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-left: 3px solid #00d2be;
-}
-
-#calendar .fc-col-header-cell {
-  background: #f8fafc;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 8px 0;
-}
-
 /* ===== Detail Layout ===== */
 
 .detail-card { margin-bottom: 24px; }
