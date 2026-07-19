@@ -17,6 +17,13 @@ class LoanerCarsController < ApplicationController
       .where("start_date <= ? AND end_date >= ?", @grid_end, @grid_start)
     @rental_by_car = grid_rentals.group_by(&:loaner_car_id)
 
+    # グリッドの並び順（貸出予定が一番遠い車を上に。貸出予定がない車はさらに上）
+    @grid_sort = params[:grid_sort] == "asc" ? "asc" : "desc"
+    no_schedule_cars, scheduled_cars = @loaner_cars.partition { |car| @rental_by_car[car.id].blank? }
+    scheduled_cars.sort_by! { |car| @rental_by_car[car.id].map(&:end_date).max }.reverse!
+    grid_cars_desc = no_schedule_cars + scheduled_cars
+    @grid_cars = @grid_sort == "asc" ? grid_cars_desc.reverse : grid_cars_desc
+
     # 貸出中
     @current_rentals = Rental
       .includes(:loaner_car, :repair)

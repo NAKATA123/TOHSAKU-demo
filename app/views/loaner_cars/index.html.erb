@@ -145,12 +145,18 @@
        data-loaner-calendar-target="panel">
 
     <div class="loaner-grid-nav">
-      <%= link_to "< 前の2週間", loaner_cars_path(start_date: (@grid_start - 14.days).to_s, tab: "grid"), class: "btn-outline btn-sm" %>
+      <%= link_to "< 前の2週間", loaner_cars_path(start_date: (@grid_start - 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <span class="loaner-grid-nav-period">
         <%= @grid_start.strftime("%Y/%m/%d") %> 〜 <%= @grid_end.strftime("%Y/%m/%d") %>
       </span>
-      <%= link_to "次の2週間 >", loaner_cars_path(start_date: (@grid_start + 14.days).to_s, tab: "grid"), class: "btn-outline btn-sm" %>
-      <%= link_to "今日", loaner_cars_path(tab: "grid"), class: "btn-outline btn-sm" %>
+      <%= link_to "次の2週間 >", loaner_cars_path(start_date: (@grid_start + 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
+      <%= link_to "今日", loaner_cars_path(tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
+      <div class="sort-toggle">
+        <%= link_to "貸出遠い順", loaner_cars_path(start_date: @grid_start.to_s, tab: "grid", grid_sort: "desc"),
+              class: "sort-btn #{'active' if @grid_sort == 'desc'}" %>
+        <%= link_to "貸出近い順", loaner_cars_path(start_date: @grid_start.to_s, tab: "grid", grid_sort: "asc"),
+              class: "sort-btn #{'active' if @grid_sort == 'asc'}" %>
+      </div>
     </div>
 
     <div class="loaner-grid-wrap">
@@ -172,8 +178,8 @@
           </tr>
         </thead>
         <tbody>
-          <% if @loaner_cars.any? %>
-            <% @loaner_cars.each do |car| %>
+          <% if @grid_cars.any? %>
+            <% @grid_cars.each do |car| %>
               <tr>
                 <td class="loaner-grid-car loaner-grid-car--<%= car.parking_lot.presence || 'none' %>">
                   <%= link_to car.name, new_rental_path(loaner_car_id: car.id, tab: "grid"), class: "loaner-grid-car-link" %>
