@@ -37,7 +37,6 @@
         <div class="header-divider"></div>
 
         <nav class="nav">
-          <span class="nav-flag">🏁</span>
           <%= link_to "修理", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %>
           <%= link_to "代車", loaner_cars_path, class: "nav-link #{'active' if current_page?(loaner_cars_path)}" %>
           <% if current_user&.admin? %>
