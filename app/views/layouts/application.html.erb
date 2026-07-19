@@ -48,9 +48,7 @@
           <span class="header-user">
             <span class="header-user-role"><%= current_user.admin? ? "ADMIN" : "STAFF" %></span>
           </span>
-          <% if current_user&.admin? %>
-            <button id="push-toggle-btn" class="push-btn" data-subscribed="false">🔕 通知OFF</button>
-          <% end %>
+          <button id="push-toggle-btn" class="push-btn" data-subscribed="false">🔕 通知OFF</button>
           <%= button_to "ログアウト", logout_path, method: :delete, class: "logout-btn" %>
         </div>
 
