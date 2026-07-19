@@ -1,8 +1,18 @@
 <div class="staff-login">
+  <p class="staff-login-corner-label">TOHSAKU / STAFF</p>
+
   <div class="staff-login-card">
+    <span class="staff-login-bracket tl"></span>
+    <span class="staff-login-bracket tr"></span>
+    <span class="staff-login-bracket bl"></span>
+    <span class="staff-login-bracket br"></span>
+
     <p class="staff-login-eyebrow">Staff Access</p>
-    <%= image_tag "logo.png", alt: "TOHSAKU", class: "staff-login-logo" %>
-    <p class="staff-login-tagline">車修理工場 業務管理システム</p>
+
+    <div class="staff-login-logo-wrap">
+      <span class="staff-login-logo-ring"></span>
+      <%= image_tag "logo.png", alt: "TOHSAKU", class: "staff-login-logo" %>
+    </div>
 
     <% if flash[:alert] %>
       <div class="staff-login-alert"><%= flash[:alert] %></div>
@@ -10,12 +20,14 @@
 
     <%= form_with url: login_path, method: :post do |f| %>
       <p class="staff-login-field-label">社員番号</p>
-      <%= f.text_field :employee_number, class: "staff-login-input",
-            placeholder: "0000",
-            autocomplete: "off",
-            maxlength: 4,
-            inputmode: "numeric",
-            autofocus: true %>
+      <div class="staff-login-digit-frame">
+        <%= f.text_field :employee_number, class: "staff-login-input",
+              placeholder: "0000",
+              autocomplete: "off",
+              maxlength: 4,
+              inputmode: "numeric",
+              autofocus: true %>
+      </div>
       <p class="staff-login-hint">誕生日4桁を入力</p>
 
       <button type="submit" class="staff-login-btn">ログイン</button>

@@ -669,23 +669,23 @@ body {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 900px 500px at 50% 0%, rgba(0,210,190,0.10), transparent 60%),
-    repeating-linear-gradient(115deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 5px),
-    #0a1a20;
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+    radial-gradient(ellipse 800px 520px at 50% 20%, rgba(0,210,190,0.10), transparent 65%),
+    #0a1418;
+  background-size: 34px 34px, 34px 34px, auto, auto;
 }
 
-.staff-login::before,
-.staff-login::after {
-  content: '';
+.staff-login-corner-label {
   position: absolute;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.05);
-  pointer-events: none;
+  bottom: 24px;
+  right: 28px;
+  margin: 0;
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(0,210,190,0.4);
 }
-.staff-login::before { top: -90px; left: -90px; }
-.staff-login::after  { bottom: -90px; right: -90px; }
 
 .staff-login-card {
   position: relative;
@@ -693,35 +693,52 @@ body {
   width: 100%;
   max-width: 380px;
   text-align: center;
+  padding: 44px 36px 36px;
 }
+
+.staff-login-bracket { position: absolute; width: 26px; height: 26px; }
+.staff-login-bracket::before,
+.staff-login-bracket::after { content: ''; position: absolute; background: #00d2be; }
+.staff-login-bracket.tl { top: 0; left: 0; }
+.staff-login-bracket.tr { top: 0; right: 0; transform: scaleX(-1); }
+.staff-login-bracket.bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.staff-login-bracket.br { bottom: 0; right: 0; transform: scale(-1, -1); }
+.staff-login-bracket::before { width: 100%; height: 1.5px; top: 0; left: 0; }
+.staff-login-bracket::after  { width: 1.5px; height: 100%; top: 0; left: 0; }
 
 .staff-login-eyebrow {
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
   color: #00d2be;
-  margin: 0 0 22px;
+  margin: 0 0 26px;
+}
+
+.staff-login-logo-wrap { position: relative; display: inline-block; margin-bottom: 44px; }
+
+.staff-login-logo-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 168px;
+  height: 168px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(0,210,190,0.22);
 }
 
 .staff-login-logo {
-  height: 34px;
+  position: relative;
+  height: 44px;
   width: auto;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 0 18px rgba(0,210,190,0.25));
-}
-
-.staff-login-tagline {
-  font-size: 13px;
-  color: rgba(255,255,255,0.52);
-  letter-spacing: 0.04em;
-  margin: 0 0 40px;
+  filter: drop-shadow(0 0 16px rgba(0,210,190,0.3));
 }
 
 .staff-login-alert {
   margin: 0 0 20px;
   padding: 11px 14px;
-  border-radius: 8px;
+  border-radius: 2px;
   border: 1px solid rgba(248,113,113,0.35);
   background: rgba(248,113,113,0.1);
   color: #fca5a5;
@@ -739,10 +756,23 @@ body {
   text-align: left;
 }
 
+.staff-login-digit-frame { position: relative; padding: 3px; }
+.staff-login-digit-frame::before,
+.staff-login-digit-frame::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 10px;
+  border: 1px solid rgba(0,210,190,0.4);
+}
+.staff-login-digit-frame::before { left: -10px; border-right: none; }
+.staff-login-digit-frame::after  { right: -10px; border-left: none; }
+
 .staff-login-input {
   width: 100%;
   height: 66px;
-  border-radius: 8px;
+  border-radius: 2px;
   background: rgba(255,255,255,0.03);
   border: 1px solid #2b3a41;
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
@@ -777,15 +807,16 @@ body {
 .staff-login-btn {
   width: 100%;
   border: none;
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 15px;
   background: #00d2be;
   color: #04211d;
   font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 100%, 16px 100%);
   transition: background 0.15s, transform 0.1s;
 }
 .staff-login-btn:hover { background: #14e4d0; }
