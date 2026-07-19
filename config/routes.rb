@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "healthz", to: proc { [200, { "Content-Type" => "text/plain" }, ["ok"]] }
+
   root "home#top"
 
   get    "login",  to: "sessions#new"
