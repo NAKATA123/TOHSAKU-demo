@@ -723,8 +723,11 @@ body {
 
 .staff-login-logo {
   position: relative;
+  display: block;
   height: 44px;
   width: auto;
+  max-width: 100%;
+  object-fit: contain;
   filter: drop-shadow(0 0 16px rgba(0,210,190,0.3));
 }
 
