@@ -1302,7 +1302,6 @@ span.flatpickr-weekday {
   }
   .brand        { order: 1; padding: 10px 0; }
   .header-right { order: 2; margin-left: auto; gap: 6px; }
-  .push-btn     { display: none; }
   .header-divider { display: none; }
   .nav {
     order: 3;
