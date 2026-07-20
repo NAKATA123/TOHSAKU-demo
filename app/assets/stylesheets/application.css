@@ -820,6 +820,8 @@ body {
 
 /* ===== Page Layout ===== */
 
+.main-content { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+
 .page-container { max-width: 1200px; margin: 0 auto; padding: 24px 24px 48px; }
 
 .page-header {
@@ -1338,5 +1340,8 @@ span.flatpickr-weekday {
     padding: 8px 16px;
   }
   .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
-  .tab-btn { white-space: nowrap; flex-shrink: 0; }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; padding: 9px 6px; font-size: 12px; letter-spacing: 0.02em; }
+
+  .main-content   { padding: 0 12px; }
+  .page-container { padding: 16px 12px 32px; }
 }
