@@ -161,7 +161,7 @@
     <div class="loaner-grid-nav">
       <%= link_to "< 前の2週間", loaner_cars_path(start_date: (@grid_start - 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <span class="loaner-grid-nav-period">
-        <%= @grid_start.strftime("%Y/%m/%d") %> 〜 <%= @grid_end.strftime("%Y/%m/%d") %>
+        <%= @grid_start.strftime("%Y/%m/%d") %> 〜 <%= @grid_end.strftime("%m/%d") %>
       </span>
       <%= link_to "次の2週間 >", loaner_cars_path(start_date: (@grid_start + 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <%= link_to "今日", loaner_cars_path(tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
@@ -340,7 +340,7 @@
                 <td><%= rental.loaner_car.name %></td>
                 <td><%= rental.customer_name.presence || rental.repair&.customer_name || "なし" %></td>
                 <td><%= rental.start_date.strftime("%Y/%m/%d") %></td>
-                <td><%= rental.end_date.strftime("%Y/%m/%d") %></td>
+                <td><%= rental.end_date.strftime(rental.start_date.year == rental.end_date.year ? "%m/%d" : "%Y/%m/%d") %></td>
               </tr>
             <% end %>
           </tbody>
