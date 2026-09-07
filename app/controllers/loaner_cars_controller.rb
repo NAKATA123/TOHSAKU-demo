@@ -26,7 +26,7 @@ class LoanerCarsController < ApplicationController
 
     # 貸出中
     @current_rentals = Rental
-      .includes(:loaner_car, :repair)
+      .includes(:loaner_car, :repair, :created_by)
       .where("start_date <= ? AND end_date >= ?", today, today)
       .order(:start_date)
 
@@ -35,7 +35,7 @@ class LoanerCarsController < ApplicationController
     month_start = Date.parse("#{@history_month}-01")
     month_end   = month_start.end_of_month
     @all_rentals = Rental
-      .includes(:loaner_car, :created_by, :repair)
+      .includes(:loaner_car, :repair)
       .where("start_date <= ? AND end_date >= ?", month_end, month_start)
       .order(start_date: :desc)
       .page(params[:history_page]).per(100)

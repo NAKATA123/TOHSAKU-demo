@@ -48,6 +48,8 @@
           <th>代車</th>
           <th>期間</th>
           <th>顧客</th>
+          <th class="col-meta">登録日時</th>
+          <th class="col-meta">登録者</th>
         </tr>
         <% @current_rentals.each do |r| %>
           <tr>
@@ -59,6 +61,8 @@
             <td>
               <%= r.customer_name.presence || r.repair&.customer_name || "顧客情報なし" %>
             </td>
+            <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+            <td class="col-meta"><%= r.created_by&.name || "-" %></td>
           </tr>
         <% end %>
       </table>
@@ -290,8 +294,6 @@
               <th>顧客</th>
               <th>開始日</th>
               <th>終了日</th>
-              <th>登録日時</th>
-              <th>登録者</th>
             </tr>
           </thead>
           <tbody>
@@ -301,8 +303,6 @@
                 <td><%= rental.customer_name.presence || rental.repair&.customer_name || "なし" %></td>
                 <td><%= rental.start_date.strftime("%Y/%m/%d") %></td>
                 <td><%= rental.end_date.strftime("%Y/%m/%d") %></td>
-                <td class="muted"><%= rental.created_at.strftime("%Y/%m/%d %H:%M") %></td>
-                <td><%= rental.created_by&.name || "-" %></td>
               </tr>
             <% end %>
           </tbody>
