@@ -1,0 +1,85 @@
+<div class="page-container">
+
+  <h1 class="page-title">設定</h1>
+
+  <div class="page-header">
+    <h2 class="section-title">代車登録</h2>
+    <div class="page-actions">
+      <%= link_to "＋代車登録", new_loaner_car_path, class: "btn-primary" %>
+    </div>
+  </div>
+
+  <table class="repair-table">
+    <thead>
+      <tr>
+        <th>名前</th>
+        <th>ナンバー</th>
+        <th>駐車場</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @loaner_cars.each do |car| %>
+        <tr class="table-row-link" onclick="location.href='<%= edit_loaner_car_path(car) %>'">
+          <td><%= car.name %></td>
+          <td><%= car.car_number %></td>
+          <td>
+            <% lot = car.parking_lot.presence || "未設定" %>
+            <span class="parking-badge parking-<%= lot %>">
+              <%= LoanerCar::PARKING_LOTS[lot] || "未設定" %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if current_user.admin? %>
+    <hr class="section-divider">
+
+    <div class="page-header">
+      <h2 class="section-title">ユーザー管理</h2>
+      <div class="page-actions">
+        <%= link_to "＋ユーザー追加", new_user_path, class: "btn-primary" %>
+      </div>
+    </div>
+
+    <table class="repair-table">
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>社員番号</th>
+          <th>権限</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.employee_number %></td>
+            <td>
+              <% if user.admin? %>
+                <span class="status-badge working">管理者</span>
+              <% else %>
+                <span class="status-badge">従業員</span>
+              <% end %>
+            </td>
+            <td class="repair-actions">
+              <%= link_to "編集", edit_user_path(user), class: "btn-outline" %>
+              <% if user != current_user %>
+                <%= button_to "削除",
+                      user_path(user),
+                      method: :delete,
+                      data: { turbo_confirm: "#{user.name} を削除しますか？" },
+                      class: "btn-danger" %>
+              <% else %>
+                <span class="muted">（自分）</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+</div>

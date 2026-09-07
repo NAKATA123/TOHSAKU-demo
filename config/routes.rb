@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   # root "home#top"
   root "loaner_cars#index"
 
+  get "settings", to: "settings#index"
+
   get    "login",  to: "sessions#new"
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"

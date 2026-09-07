@@ -40,36 +40,6 @@
        data-panel="list"
        data-loaner-calendar-target="panel">
 
-    <div class="list-action">
-      <%= link_to "代車を登録する", new_loaner_car_path, class: "btn-primary" %>
-    </div>
-
-    <table class="repair-table">
-      <thead>
-        <tr>
-          <th>名前</th>
-          <th>ナンバー</th>
-          <th>駐車場</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @loaner_cars.each do |car| %>
-          <tr class="table-row-link" onclick="location.href='<%= edit_loaner_car_path(car) %>'">
-            <td><%= car.name %></td>
-            <td><%= car.car_number %></td>
-            <td>
-              <% lot = car.parking_lot.presence || "未設定" %>
-              <span class="parking-badge parking-<%= lot %>">
-                <%= LoanerCar::PARKING_LOTS[lot] || "未設定" %>
-              </span>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-    <hr class="section-divider">
-
     <h2 class="section-title">貸出中</h2>
 
     <% if @current_rentals.any? %>
@@ -154,10 +124,9 @@
       <%= link_to "次の2週間 >", loaner_cars_path(start_date: (@grid_start + 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <%= link_to "今日", loaner_cars_path(tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <div class="sort-toggle">
-        <%= link_to "貸出遠い順", loaner_cars_path(start_date: @grid_start.to_s, tab: "grid", grid_sort: "desc"),
-              class: "sort-btn #{'active' if @grid_sort == 'desc'}" %>
-        <%= link_to "貸出近い順", loaner_cars_path(start_date: @grid_start.to_s, tab: "grid", grid_sort: "asc"),
-              class: "sort-btn #{'active' if @grid_sort == 'asc'}" %>
+        <%= link_to (@grid_sort == "desc" ? "貸出遠い順 ▾" : "貸出近い順 ▴"),
+              loaner_cars_path(start_date: @grid_start.to_s, tab: "grid", grid_sort: @grid_sort == "desc" ? "asc" : "desc"),
+              class: "sort-btn active" %>
       </div>
     </div>
 
@@ -329,7 +298,7 @@
             <% @all_rentals.each do |rental| %>
               <tr class="table-row-link" onclick="location.href='<%= rental_path(rental) %>'">
                 <td><%= rental.loaner_car.name %></td>
-                <td><%= rental.customer_name.presence || rental.repair&.customer_name || "顧客情報なし" %></td>
+                <td><%= rental.customer_name.presence || rental.repair&.customer_name || "なし" %></td>
                 <td><%= rental.start_date.strftime("%Y/%m/%d") %></td>
                 <td><%= rental.end_date.strftime("%Y/%m/%d") %></td>
                 <td class="muted"><%= rental.created_at.strftime("%Y/%m/%d %H:%M") %></td>

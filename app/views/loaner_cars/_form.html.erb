@@ -19,7 +19,7 @@
 
   <div class="form-actions">
     <%= f.submit @loaner_car.new_record? ? "登録する" : "更新する", class: "btn-primary" %>
-    <%= link_to "戻る", loaner_cars_path, class: "btn-outline" %>
+    <%= link_to "戻る", settings_path, class: "btn-outline" %>
     <% unless @loaner_car.new_record? %>
       <%= link_to "削除", loaner_car_path(@loaner_car),
             data: { turbo_method: :delete, turbo_confirm: "#{@loaner_car.name}を削除しますか？" },

@@ -61,7 +61,7 @@ class LoanerCarsController < ApplicationController
   def create
     @loaner_car = LoanerCar.new(loaner_car_params)
     if @loaner_car.save
-      redirect_to loaner_cars_path
+      redirect_to settings_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -72,7 +72,7 @@ class LoanerCarsController < ApplicationController
 
   def update
     if @loaner_car.update(loaner_car_params)
-      redirect_to loaner_cars_path, notice: "代車情報を更新しました"
+      redirect_to settings_path, notice: "代車情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -80,7 +80,7 @@ class LoanerCarsController < ApplicationController
 
   def destroy
     @loaner_car.destroy
-    redirect_to loaner_cars_path, notice: "代車を削除しました"
+    redirect_to settings_path, notice: "代車を削除しました"
   end
 
   private

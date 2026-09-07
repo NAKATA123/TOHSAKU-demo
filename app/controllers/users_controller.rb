@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.email = "#{@user.employee_number}@tohsaku.local" if @user.email.blank?
     if @user.save
-      redirect_to users_path, notice: "ユーザーを追加しました"
+      redirect_to settings_path, notice: "ユーザーを追加しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(edit_params)
-      redirect_to users_path, notice: "ユーザー情報を更新しました"
+      redirect_to settings_path, notice: "ユーザー情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,10 +35,10 @@ class UsersController < ApplicationController
   def destroy
     user = User.find(params[:id])
     if user == current_user
-      redirect_to users_path, alert: "自分自身は削除できません"
+      redirect_to settings_path, alert: "自分自身は削除できません"
     else
       user.destroy
-      redirect_to users_path, notice: "ユーザーを削除しました"
+      redirect_to settings_path, notice: "ユーザーを削除しました"
     end
   end
 
