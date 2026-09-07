@@ -24,6 +24,15 @@ class LoanerCarsController < ApplicationController
     grid_cars_desc = no_schedule_cars + scheduled_cars
     @grid_cars = @grid_sort == "asc" ? grid_cars_desc.reverse : grid_cars_desc
 
+    # 貸出登録履歴（登録日時が新しい順に最大50件、10件ずつページネーション）
+    recent_registrations = Rental
+      .includes(:loaner_car, :created_by, :repair)
+      .order(created_at: :desc)
+      .limit(50)
+      .to_a
+    @registration_history = Kaminari.paginate_array(recent_registrations)
+      .page(params[:registration_page]).per(10)
+
     # 貸出中
     @current_rentals = Rental
       .includes(:loaner_car, :repair, :created_by)

@@ -40,6 +40,44 @@
        data-panel="list"
        data-loaner-calendar-target="panel">
 
+    <h2 class="section-title">貸出登録履歴</h2>
+
+    <% if @registration_history.any? %>
+      <div class="table-scroll">
+        <table class="repair-table">
+          <thead>
+            <tr>
+              <th>代車</th>
+              <th>期間</th>
+              <th>顧客</th>
+              <th class="col-meta">登録日時</th>
+              <th class="col-meta">登録者</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @registration_history.each do |r| %>
+              <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
+                <td><%= r.loaner_car.name %></td>
+                <td style="white-space:nowrap">
+                  <%= r.start_date.strftime("%m/%d") %> 〜
+                  <%= r.end_date.strftime("%m/%d") %>
+                </td>
+                <td><%= r.customer_name.presence || r.repair&.customer_name || "なし" %></td>
+                <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+                <td class="col-meta"><%= r.created_by&.name || "-" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <%= paginate @registration_history, param_name: :registration_page, params: { tab: "list" } %>
+    <% else %>
+      <div class="card empty-state"><p class="muted">貸出登録の履歴はありません。</p></div>
+    <% end %>
+
+    <hr class="section-divider">
+
     <h2 class="section-title">貸出中</h2>
 
     <% if @current_rentals.any? %>
@@ -55,11 +93,11 @@
           <tr>
             <td><%= r.loaner_car.name %></td>
             <td>
-              <%= r.start_date.strftime("%Y/%m/%d") %> 〜
-              <%= r.end_date.strftime("%Y/%m/%d") %>
+              <%= r.start_date.strftime("%m/%d") %> 〜
+              <%= r.end_date.strftime("%m/%d") %>
             </td>
             <td>
-              <%= r.customer_name.presence || r.repair&.customer_name || "顧客情報なし" %>
+              <%= r.customer_name.presence || r.repair&.customer_name || "なし" %>
             </td>
             <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
             <td class="col-meta"><%= r.created_by&.name || "-" %></td>
@@ -97,8 +135,8 @@
               <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
                 <td><%= r.loaner_car.name %></td>
                 <td style="white-space:nowrap">
-                  <span class="col-meta"><%= r.start_date.strftime("%Y/") %></span><%= r.start_date.strftime("%m/%d") %> 〜
-                  <span class="col-meta"><%= r.end_date.strftime("%Y/") %></span><%= r.end_date.strftime("%m/%d") %>
+                  <%= r.start_date.strftime("%m/%d") %> 〜
+                  <%= r.end_date.strftime("%m/%d") %>
                 </td>
                 <td><%= r.customer_name.presence || r.repair&.customer_name || "顧客情報なし" %></td>
                 <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
