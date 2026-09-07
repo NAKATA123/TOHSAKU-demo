@@ -36,16 +36,19 @@
 
         <div class="header-divider"></div>
 
+        <% if false %>
         <nav class="nav">
-          <%# link_to "修理", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %>
+          <%= link_to "修理", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %>
           <%= link_to "代車", loaner_cars_path, class: "nav-link #{'active' if current_page?(loaner_cars_path)}" %>
           <%= link_to "設定", settings_path, class: "nav-link #{'active' if current_page?(settings_path)}" %>
         </nav>
+        <% end %>
 
         <div class="header-right">
           <span class="header-user">
             <span class="header-user-role"><%= current_user.admin? ? "ADMIN" : "STAFF" %></span>
           </span>
+          <%= link_to "⚙️", settings_path, class: "settings-icon-btn #{'active' if current_page?(settings_path)}", title: "設定" %>
           <button id="push-toggle-btn" class="push-btn" data-subscribed="false">🔕 通知OFF</button>
           <%= button_to "ログアウト", logout_path, method: :delete, class: "logout-btn" %>
         </div>

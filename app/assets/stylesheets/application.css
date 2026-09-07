@@ -183,6 +183,7 @@ body {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .header-user-role {
@@ -195,6 +196,22 @@ body {
   padding: 3px 8px;
   border-radius: 4px;
 }
+
+.settings-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.70);
+  text-decoration: none;
+  transition: 0.15s;
+}
+.settings-icon-btn:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+.settings-icon-btn.active { color: #00d2be; border-color: #00d2be; }
 
 .push-btn {
   display: inline-flex;
