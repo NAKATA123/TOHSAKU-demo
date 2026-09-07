@@ -1,45 +1,42 @@
-<div class="page-container">
+<div class="page-container" data-controller="loaner-calendar">
 
   <h1 class="page-title">設定</h1>
 
-  <div class="page-header">
-    <h2 class="section-title">代車登録</h2>
-    <div class="page-actions">
-      <%= link_to "＋代車登録", new_loaner_car_path, class: "btn-primary" %>
-    </div>
+  <div class="tab-nav">
+    <button class="tab-btn active"
+        data-tab="cars"
+        data-loaner-calendar-target="tab"
+        data-action="click->loaner-calendar#switch">
+      代車登録
+    </button>
+
+    <% if current_user.admin? %>
+      <button class="tab-btn"
+          data-tab="users"
+          data-loaner-calendar-target="tab"
+          data-action="click->loaner-calendar#switch">
+        ユーザー管理
+      </button>
+    <% end %>
+
+    <button class="tab-btn"
+        data-tab="history"
+        data-loaner-calendar-target="tab"
+        data-action="click->loaner-calendar#switch">
+      貸出履歴
+    </button>
   </div>
 
-  <table class="repair-table">
-    <thead>
-      <tr>
-        <th>名前</th>
-        <th>ナンバー</th>
-        <th>駐車場</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @loaner_cars.each do |car| %>
-        <tr class="table-row-link" onclick="location.href='<%= edit_loaner_car_path(car) %>'">
-          <td><%= car.name %></td>
-          <td><%= car.car_number %></td>
-          <td>
-            <% lot = car.parking_lot.presence || "未設定" %>
-            <span class="parking-badge parking-<%= lot %>">
-              <%= LoanerCar::PARKING_LOTS[lot] || "未設定" %>
-            </span>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <% if current_user.admin? %>
-    <hr class="section-divider">
+  <%# ===== 代車登録タブ ===== %>
+  <div id="tab-cars"
+       class="tab-content active"
+       data-panel="cars"
+       data-loaner-calendar-target="panel">
 
     <div class="page-header">
-      <h2 class="section-title">ユーザー管理</h2>
+      <h2 class="section-title">代車登録</h2>
       <div class="page-actions">
-        <%= link_to "＋ユーザー追加", new_user_path, class: "btn-primary" %>
+        <%= link_to "＋代車登録", new_loaner_car_path, class: "btn-primary" %>
       </div>
     </div>
 
@@ -47,39 +44,134 @@
       <thead>
         <tr>
           <th>名前</th>
-          <th>社員番号</th>
-          <th>権限</th>
-          <th></th>
+          <th>ナンバー</th>
+          <th>駐車場</th>
         </tr>
       </thead>
       <tbody>
-        <% @users.each do |user| %>
-          <tr>
-            <td><%= user.name %></td>
-            <td><%= user.employee_number %></td>
+        <% @loaner_cars.each do |car| %>
+          <tr class="table-row-link" onclick="location.href='<%= edit_loaner_car_path(car) %>'">
+            <td><%= car.name %></td>
+            <td><%= car.car_number %></td>
             <td>
-              <% if user.admin? %>
-                <span class="status-badge working">管理者</span>
-              <% else %>
-                <span class="status-badge">従業員</span>
-              <% end %>
-            </td>
-            <td class="repair-actions">
-              <%= link_to "編集", edit_user_path(user), class: "btn-outline" %>
-              <% if user != current_user %>
-                <%= button_to "削除",
-                      user_path(user),
-                      method: :delete,
-                      data: { turbo_confirm: "#{user.name} を削除しますか？" },
-                      class: "btn-danger" %>
-              <% else %>
-                <span class="muted">（自分）</span>
-              <% end %>
+              <% lot = car.parking_lot.presence || "未設定" %>
+              <span class="parking-badge parking-<%= lot %>">
+                <%= LoanerCar::PARKING_LOTS[lot] || "未設定" %>
+              </span>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <% if current_user.admin? %>
+    <%# ===== ユーザー管理タブ ===== %>
+    <div id="tab-users"
+         class="tab-content"
+         data-panel="users"
+         data-loaner-calendar-target="panel">
+
+      <div class="page-header">
+        <h2 class="section-title">ユーザー管理</h2>
+        <div class="page-actions">
+          <%= link_to "＋ユーザー追加", new_user_path, class: "btn-primary" %>
+        </div>
+      </div>
+
+      <table class="repair-table">
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>社員番号</th>
+            <th>権限</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.name %></td>
+              <td><%= user.employee_number %></td>
+              <td>
+                <% if user.admin? %>
+                  <span class="status-badge working">管理者</span>
+                <% else %>
+                  <span class="status-badge">従業員</span>
+                <% end %>
+              </td>
+              <td class="repair-actions">
+                <%= link_to "編集", edit_user_path(user), class: "btn-outline" %>
+                <% if user != current_user %>
+                  <%= button_to "削除",
+                        user_path(user),
+                        method: :delete,
+                        data: { turbo_confirm: "#{user.name} を削除しますか？" },
+                        class: "btn-danger" %>
+                <% else %>
+                  <span class="muted">（自分）</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% end %>
+
+  <%# ===== 貸出履歴タブ ===== %>
+  <div id="tab-history"
+       class="tab-content"
+       data-panel="history"
+       data-loaner-calendar-target="panel">
+
+    <%# 月フィルター %>
+    <div class="history-filter">
+      <select class="form-input" style="max-width:160px;" onchange="location.href=this.value">
+        <% 13.times do |i| %>
+          <% m = Time.zone.today.beginning_of_month - i.months %>
+          <% val = m.strftime("%Y-%m") %>
+          <% label = m.strftime("%Y年%-m月") %>
+          <option value="<%= settings_path(tab: "history", history_month: val) %>"
+                  <%= "selected" if @history_month == val %>>
+            <%= label %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+
+    <% if @all_rentals.any? %>
+      <div class="table-scroll">
+        <table class="repair-table">
+          <thead>
+            <tr>
+              <th>代車</th>
+              <th>顧客</th>
+              <th>開始日</th>
+              <th>終了日</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @all_rentals.each do |rental| %>
+              <tr class="table-row-link" onclick="location.href='<%= rental_path(rental) %>'">
+                <td><%= rental.loaner_car.name %></td>
+                <td><%= rental.customer_name.presence || rental.repair&.customer_name || "なし" %></td>
+                <td><%= rental.start_date.strftime("%Y/%m/%d") %></td>
+                <td><%= rental.end_date.strftime(rental.start_date.year == rental.end_date.year ? "%m/%d" : "%Y/%m/%d") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <%= paginate @all_rentals, param_name: :history_page,
+            params: { tab: "history", history_month: @history_month } %>
+    <% else %>
+      <div class="card empty-state">
+        <p class="muted">この月の貸出記録はありません。</p>
+      </div>
+    <% end %>
+
+  </div>
 
 </div>

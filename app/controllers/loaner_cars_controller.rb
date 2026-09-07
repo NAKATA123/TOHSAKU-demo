@@ -26,7 +26,7 @@ class LoanerCarsController < ApplicationController
 
     # 貸出登録履歴（登録日時が新しい順に最大50件、10件ずつページネーション）
     recent_registrations = Rental
-      .includes(:loaner_car, :created_by, :repair)
+      .includes(:loaner_car, :created_by)
       .order(created_at: :desc)
       .limit(50)
       .to_a
@@ -38,16 +38,6 @@ class LoanerCarsController < ApplicationController
       .includes(:loaner_car, :repair, :created_by)
       .where("start_date <= ? AND end_date >= ?", today, today)
       .order(:start_date)
-
-    # 貸出履歴（月フィルター＋ページネーション）
-    @history_month = params[:history_month].presence || today.strftime("%Y-%m")
-    month_start = Date.parse("#{@history_month}-01")
-    month_end   = month_start.end_of_month
-    @all_rentals = Rental
-      .includes(:loaner_car, :repair)
-      .where("start_date <= ? AND end_date >= ?", month_end, month_start)
-      .order(start_date: :desc)
-      .page(params[:history_page]).per(100)
 
     # 駐車場別グループ
     @cars_by_lot = @loaner_cars.group_by { |c| c.parking_lot.presence || "未設定" }
