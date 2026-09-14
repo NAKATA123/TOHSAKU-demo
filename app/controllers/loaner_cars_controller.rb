@@ -20,6 +20,7 @@ class LoanerCarsController < ApplicationController
     # グリッドの並び順（貸出予定が一番遠い車を上に。貸出予定がない車はさらに上）
     @grid_sort = params[:grid_sort] == "asc" ? "asc" : "desc"
     no_schedule_cars, scheduled_cars = @loaner_cars.partition { |car| @rental_by_car[car.id].blank? }
+    no_schedule_cars.sort_by! { |car| LoanerCar::PARKING_LOTS.keys.index(car.parking_lot) || LoanerCar::PARKING_LOTS.size }
     scheduled_cars.sort_by! { |car| @rental_by_car[car.id].map(&:end_date).max }.reverse!
     grid_cars_desc = no_schedule_cars + scheduled_cars
     @grid_cars = @grid_sort == "asc" ? grid_cars_desc.reverse : grid_cars_desc
