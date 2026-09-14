@@ -2,7 +2,13 @@
   <div class="page-header">
     <h1 class="page-title">貸出詳細</h1>
     <div class="page-actions">
-      <%= link_to "編集", edit_rental_path(@rental), class: "btn-primary" %>
+      <% if @rental.start_date <= Time.zone.today && @rental.end_date > Time.zone.today %>
+        <%= button_to "今日返却する", returned_rental_path(@rental),
+              method: :patch,
+              data: { turbo_confirm: "#{@rental.loaner_car.name}を今日返却済みにしますか？" },
+              class: "btn-primary" %>
+      <% end %>
+      <%= link_to "編集", edit_rental_path(@rental), class: "btn-outline" %>
       <%= link_to "戻る", loaner_cars_path(tab: "grid"), class: "btn-outline" %>
       <%= link_to "削除", rental_path(@rental),
             data: { turbo_method: :delete, turbo_confirm: "この貸出を削除しますか？" },

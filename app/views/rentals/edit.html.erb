@@ -30,6 +30,13 @@
         <%= f.collection_select :loaner_car_id, @loaner_cars, :id, :name, {}, class: "form-select" %>
       </div>
 
+      <div>
+        <%= label_tag :parking_lot, "駐車場", class: "form-label" %>
+        <%= select_tag :parking_lot,
+              options_for_select(LoanerCar::PARKING_LOTS.map { |k, v| [v, k] }, @rental.loaner_car&.parking_lot),
+              include_blank: "未設定", class: "form-select" %>
+      </div>
+
       <div data-controller="date-range">
         <label class="form-label">貸出期間</label>
         <input type="text" class="form-input" placeholder="開始日 〜 終了日"

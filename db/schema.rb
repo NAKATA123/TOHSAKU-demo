@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_07_19_124300) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_14_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_19_124300) do
     t.datetime "updated_at", null: false
     t.date "shaken_expiry_date"
     t.string "parking_lot"
+    t.integer "position"
   end
 
   create_table "notices", force: :cascade do |t|

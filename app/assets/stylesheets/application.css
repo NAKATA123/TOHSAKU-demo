@@ -441,6 +441,19 @@ body {
 .repair-table tr:last-child td { border-bottom: none; }
 .repair-table tbody tr:hover { background: #f8fafc; }
 
+.drag-handle {
+  width: 24px;
+  color: #94a3b8;
+  cursor: grab;
+  font-size: 16px;
+  text-align: center;
+  user-select: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+}
+.drag-handle:active { cursor: grabbing; }
+.repair-table tbody tr.dragging { background: #eef2ff; opacity: 0.85; }
+
 .table-row-link { cursor: pointer; }
 .table-row-link:hover { background: #f0f8fa !important; }
 

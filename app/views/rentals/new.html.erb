@@ -39,6 +39,13 @@
     </div>
 
     <div>
+      <%= label_tag :parking_lot, "駐車場", class: "form-label" %>
+      <%= select_tag :parking_lot,
+            options_for_select(LoanerCar::PARKING_LOTS.map { |k, v| [v, k] }, @rental.loaner_car&.parking_lot),
+            include_blank: "未設定", class: "form-select" %>
+    </div>
+
+    <div>
       <%= f.label :reason, "理由", class: "form-label" %>
       <%= f.text_field :reason, class: "form-input", placeholder: "例：車検、修理、点検" %>
     </div>

@@ -12,6 +12,8 @@ class RentalsController < ApplicationController
     @rental.created_by = current_user
 
     if @rental.save
+      @rental.loaner_car.update(parking_lot: params[:parking_lot]) if params.key?(:parking_lot)
+
       if @rental.repair.present?
         redirect_to repair_path(@rental.repair), notice: "代車を登録しました"
       else
@@ -49,6 +51,7 @@ class RentalsController < ApplicationController
   def update
     @rental = Rental.find(params[:id])
     if @rental.update(rental_params)
+      @rental.loaner_car.update(parking_lot: params[:parking_lot]) if params.key?(:parking_lot)
       redirect_to rental_path(@rental), notice: "貸出情報を更新しました"
     else
       @loaner_cars = LoanerCar.all
@@ -60,6 +63,19 @@ class RentalsController < ApplicationController
     rental = Rental.find(params[:id])
     rental.destroy
     redirect_to loaner_cars_path, notice: "貸出を削除しました"
+  end
+
+  # 予定より早く返却された場合、終了日を今日に更新する
+  def returned
+    rental = Rental.find(params[:id])
+    destination = params[:tab].present? ? loaner_cars_path(tab: params[:tab]) : rental_path(rental)
+
+    if rental.end_date > Time.zone.today
+      rental.update!(end_date: Time.zone.today)
+      redirect_to destination, notice: "返却済みにしました"
+    else
+      redirect_to destination, alert: "すでに終了日を過ぎています"
+    end
   end
 
   private

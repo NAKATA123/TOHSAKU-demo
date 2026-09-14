@@ -75,29 +75,41 @@
     <h2 class="section-title">貸出中</h2>
 
     <% if @current_rentals.any? %>
-      <table class="repair-table">
-        <tr>
-          <th>代車</th>
-          <th>期間</th>
-          <th>顧客</th>
-          <th class="col-meta">登録日時</th>
-          <th class="col-meta">登録者</th>
-        </tr>
-        <% @current_rentals.each do |r| %>
+      <div class="table-scroll">
+        <table class="repair-table">
           <tr>
-            <td><%= r.loaner_car.name %></td>
-            <td>
-              <%= r.start_date.strftime("%m/%d") %> 〜
-              <%= r.end_date.strftime("%m/%d") %>
-            </td>
-            <td>
-              <%= r.customer_name.presence || r.repair&.customer_name || "なし" %>
-            </td>
-            <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
-            <td class="col-meta"><%= r.created_by&.name || "-" %></td>
+            <th>代車</th>
+            <th>期間</th>
+            <th>顧客</th>
+            <th class="col-meta">登録日時</th>
+            <th class="col-meta">登録者</th>
+            <th></th>
           </tr>
-        <% end %>
-      </table>
+          <% @current_rentals.each do |r| %>
+            <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
+              <td><%= r.loaner_car.name %></td>
+              <td>
+                <%= r.start_date.strftime("%m/%d") %> 〜
+                <%= r.end_date.strftime("%m/%d") %>
+              </td>
+              <td>
+                <%= r.customer_name.presence || r.repair&.customer_name || "なし" %>
+              </td>
+              <td class="col-meta muted"><%= r.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+              <td class="col-meta"><%= r.created_by&.name || "-" %></td>
+              <td class="repair-actions" onclick="event.stopPropagation()">
+                <% if r.end_date > Time.zone.today %>
+                  <%= button_to "今日返却", returned_rental_path(r),
+                        method: :patch,
+                        params: { tab: "list" },
+                        data: { turbo_confirm: "#{r.loaner_car.name}を今日返却済みにしますか？" },
+                        class: "btn-outline btn-sm" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
     <% else %>
       <div class="card empty-state"><p class="muted">現在貸出中の代車はありません。</p></div>
     <% end %>

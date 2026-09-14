@@ -4,7 +4,7 @@ class LoanerCarsController < ApplicationController
 
   # 一覧（タブ切り替え＋グリッド）
   def index
-    @loaner_cars = LoanerCar.includes(:rentals).order(created_at: :desc)
+    @loaner_cars = LoanerCar.includes(:rentals).order(:position)
     today = Time.zone.today
 
     # グリッド用（2週間）
@@ -59,6 +59,7 @@ class LoanerCarsController < ApplicationController
   # 登録
   def create
     @loaner_car = LoanerCar.new(loaner_car_params)
+    @loaner_car.position = (LoanerCar.maximum(:position) || -1) + 1
     if @loaner_car.save
       redirect_to settings_path
     else
@@ -80,6 +81,14 @@ class LoanerCarsController < ApplicationController
   def destroy
     @loaner_car.destroy
     redirect_to settings_path, notice: "代車を削除しました"
+  end
+
+  # 代車の並び替え（ドラッグ&ドロップ）
+  def reorder
+    Array(params[:order]).each_with_index do |id, index|
+      LoanerCar.where(id: id).update_all(position: index)
+    end
+    head :ok
   end
 
   private

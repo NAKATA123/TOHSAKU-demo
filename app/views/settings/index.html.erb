@@ -40,9 +40,12 @@
       </div>
     </div>
 
-    <table class="repair-table">
+    <table class="repair-table"
+           data-controller="loaner-car-reorder"
+           data-loaner-car-reorder-url-value="<%= reorder_loaner_cars_path %>">
       <thead>
         <tr>
+          <th></th>
           <th>名前</th>
           <th>ナンバー</th>
           <th>駐車場</th>
@@ -50,8 +53,9 @@
       </thead>
       <tbody>
         <% @loaner_cars.each do |car| %>
-          <tr class="table-row-link" onclick="location.href='<%= edit_loaner_car_path(car) %>'">
-            <td><%= car.name %></td>
+          <tr data-id="<%= car.id %>">
+            <td class="drag-handle" data-action="pointerdown->loaner-car-reorder#dragStart">⠿</td>
+            <td><%= link_to car.name, edit_loaner_car_path(car) %></td>
             <td><%= car.car_number %></td>
             <td>
               <% lot = car.parking_lot.presence || "未設定" %>

@@ -17,9 +17,16 @@ Rails.application.routes.draw do
 
   resources :loaner_cars, only: [:index, :new, :create, :edit, :update, :destroy] do
     resources :rentals, only: [:index]
+    collection do
+      patch :reorder
+    end
   end
 
-  resources :rentals, only: [:new, :create, :show, :edit, :update, :destroy]
+  resources :rentals, only: [:new, :create, :show, :edit, :update, :destroy] do
+    member do
+      patch :returned
+    end
+  end
 
   resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
 
