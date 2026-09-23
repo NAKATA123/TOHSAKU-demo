@@ -34,11 +34,13 @@ class LoanerCarsController < ApplicationController
     @registration_history = Kaminari.paginate_array(recent_registrations)
       .page(params[:registration_page]).per(10)
 
-    # 貸出中
+    # 貸出中（午前/午後の半日単位で「今」判定するので、日付だけの絞り込みは候補取得の下準備）
+    current_slot = Rental.current_slot
     @current_rentals = Rental
       .includes(:loaner_car, :repair, :created_by)
       .where("start_date <= ? AND end_date >= ?", today, today)
-      .order(:start_date)
+      .select { |r| r.start_slot <= current_slot && r.end_slot >= current_slot }
+      .sort_by(&:start_date)
 
     # 駐車場別グループ
     @cars_by_lot = @loaner_cars.group_by { |c| c.parking_lot.presence || "未設定" }

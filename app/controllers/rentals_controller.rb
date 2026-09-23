@@ -72,8 +72,11 @@ class RentalsController < ApplicationController
 
     if rental.end_date > Time.zone.today
       period = Time.zone.now.hour < 12 ? "am" : "pm"
-      rental.update!(end_date: Time.zone.today, end_period: period)
-      redirect_to destination, notice: "返却済みにしました"
+      if rental.update(end_date: Time.zone.today, end_period: period)
+        redirect_to destination, notice: "返却済みにしました"
+      else
+        redirect_to destination, alert: rental.errors.full_messages.to_sentence
+      end
     else
       redirect_to destination, alert: "すでに終了日を過ぎています"
     end

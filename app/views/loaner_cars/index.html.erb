@@ -167,7 +167,7 @@
     <div class="loaner-grid-nav">
       <%= link_to "< 前の2週間", loaner_cars_path(start_date: (@grid_start - 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <span class="loaner-grid-nav-period">
-        <%= @grid_start.strftime("%Y/%m/%d") %> 〜 <%= @grid_end.strftime("%m/%d") %>
+        <%= smart_date(@grid_start) %> 〜 <%= smart_date(@grid_end) %>
       </span>
       <%= link_to "次の2週間 >", loaner_cars_path(start_date: (@grid_start + 14.days).to_s, tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
       <%= link_to "今日", loaner_cars_path(tab: "grid", grid_sort: @grid_sort), class: "btn-outline btn-sm" %>
@@ -336,7 +336,7 @@
             </thead>
             <tbody>
               <% cars.each do |car| %>
-                <% active_rental = car.rentals.find { |r| r.start_date <= today && r.end_date >= today } %>
+                <% active_rental = car.rentals.find { |r| r.start_slot <= Rental.current_slot && r.end_slot >= Rental.current_slot } %>
                 <tr>
                   <td><%= car.name %></td>
                   <td><%= car.car_number %></td>

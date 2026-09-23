@@ -23,6 +23,12 @@ class Rental < ApplicationRecord
     slot_for(end_date, end_period)
   end
 
+  # 「今」が属する半日スロット（貸出中かどうかの判定に使う）
+  def self.current_slot
+    now = Time.zone.now
+    now.to_date.jd * 2 + (now.hour < 12 ? 0 : 1)
+  end
+
   private
 
   def slot_for(date, period)

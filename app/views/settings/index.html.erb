@@ -135,7 +135,7 @@
         <% 13.times do |i| %>
           <% m = Time.zone.today.beginning_of_month - i.months %>
           <% val = m.strftime("%Y-%m") %>
-          <% label = m.strftime("%Y年%-m月") %>
+          <% label = m.year == Time.zone.today.year ? m.strftime("%-m月") : m.strftime("%Y年%-m月") %>
           <option value="<%= settings_path(tab: "history", history_month: val) %>"
                   <%= "selected" if @history_month == val %>>
             <%= label %>
@@ -160,8 +160,8 @@
               <tr class="table-row-link" onclick="location.href='<%= rental_path(rental) %>'">
                 <td><%= rental.loaner_car.name %></td>
                 <td><%= rental.customer_name.presence || rental.repair&.customer_name || "なし" %></td>
-                <td><%= rental.start_date.strftime("%Y/%m/%d") %></td>
-                <td><%= rental.end_date.strftime(rental.start_date.year == rental.end_date.year ? "%m/%d" : "%Y/%m/%d") %></td>
+                <td><%= smart_date(rental.start_date) %></td>
+                <td><%= smart_date(rental.end_date) %></td>
               </tr>
             <% end %>
           </tbody>

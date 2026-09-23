@@ -36,9 +36,9 @@
     <tr>
       <th>期間</th>
       <td>
-        <%= @rental.start_date.strftime("%Y/%m/%d") %>（<%= period_label(@rental.start_period) %>）
+        <%= smart_date(@rental.start_date) %>（<%= period_label(@rental.start_period) %>）
         〜
-        <%= @rental.end_date.strftime("%Y/%m/%d") %>（<%= period_label(@rental.end_period) %>）
+        <%= smart_date(@rental.end_date) %>（<%= period_label(@rental.end_period) %>）
       </td>
     </tr>
     <tr>
