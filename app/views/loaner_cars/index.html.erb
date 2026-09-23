@@ -99,15 +99,10 @@
               <td class="col-meta"><%= r.created_by&.name || "-" %></td>
               <td class="repair-actions" onclick="event.stopPropagation()">
                 <% if r.end_date > Time.zone.today %>
-                  <%= button_to "午前返却", returned_rental_path(r),
+                  <%= button_to "返却", returned_rental_path(r),
                         method: :patch,
-                        params: { tab: "list", period: "am" },
-                        data: { turbo_confirm: "#{r.loaner_car.name}を今日の午前に返却済みにしますか？" },
-                        class: "btn-outline btn-sm" %>
-                  <%= button_to "午後返却", returned_rental_path(r),
-                        method: :patch,
-                        params: { tab: "list", period: "pm" },
-                        data: { turbo_confirm: "#{r.loaner_car.name}を今日の午後に返却済みにしますか？" },
+                        params: { tab: "list" },
+                        data: { turbo_confirm: "#{r.loaner_car.name}を返却済みにしますか？" },
                         class: "btn-outline btn-sm" %>
                 <% end %>
               </td>

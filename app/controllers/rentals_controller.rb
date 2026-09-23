@@ -65,13 +65,13 @@ class RentalsController < ApplicationController
     redirect_to loaner_cars_path, notice: "貸出を削除しました"
   end
 
-  # 予定より早く返却された場合、終了日（と午前/午後）を今日に更新する
+  # 予定より早く返却された場合、終了日（と午前/午後）を今日・今の時間帯に更新する
   def returned
     rental = Rental.find(params[:id])
     destination = params[:tab].present? ? loaner_cars_path(tab: params[:tab]) : rental_path(rental)
-    period = Rental::PERIODS.include?(params[:period]) ? params[:period] : "pm"
 
     if rental.end_date > Time.zone.today
+      period = Time.zone.now.hour < 12 ? "am" : "pm"
       rental.update!(end_date: Time.zone.today, end_period: period)
       redirect_to destination, notice: "返却済みにしました"
     else

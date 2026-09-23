@@ -11,6 +11,7 @@ module App
     config.load_defaults 7.1
 
     config.i18n.default_locale = :ja   # ← ここ追加
+    config.time_zone = "Tokyo"
 
     config.autoload_lib(ignore: %w(assets tasks))
   end
