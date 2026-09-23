@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_09_14_000001) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_23_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,6 +70,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_09_14_000001) do
     t.bigint "created_by_id"
     t.string "customer_name"
     t.string "reason"
+    t.string "start_period", default: "am", null: false
+    t.string "end_period", default: "pm", null: false
     t.index ["created_by_id"], name: "index_rentals_on_created_by_id"
     t.index ["loaner_car_id"], name: "index_rentals_on_loaner_car_id"
     t.index ["repair_id"], name: "index_rentals_on_repair_id"

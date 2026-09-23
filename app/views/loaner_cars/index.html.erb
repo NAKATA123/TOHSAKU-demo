@@ -89,8 +89,8 @@
             <tr class="table-row-link" onclick="location.href='<%= rental_path(r) %>'">
               <td><%= r.loaner_car.name %></td>
               <td>
-                <%= r.start_date.strftime("%m/%d") %> 〜
-                <%= r.end_date.strftime("%m/%d") %>
+                <%= r.start_date.strftime("%m/%d") %>(<%= period_label(r.start_period) %>) 〜
+                <%= r.end_date.strftime("%m/%d") %>(<%= period_label(r.end_period) %>)
               </td>
               <td>
                 <%= r.customer_name.presence || r.repair&.customer_name || "なし" %>
@@ -99,10 +99,15 @@
               <td class="col-meta"><%= r.created_by&.name || "-" %></td>
               <td class="repair-actions" onclick="event.stopPropagation()">
                 <% if r.end_date > Time.zone.today %>
-                  <%= button_to "今日返却", returned_rental_path(r),
+                  <%= button_to "午前返却", returned_rental_path(r),
                         method: :patch,
-                        params: { tab: "list" },
-                        data: { turbo_confirm: "#{r.loaner_car.name}を今日返却済みにしますか？" },
+                        params: { tab: "list", period: "am" },
+                        data: { turbo_confirm: "#{r.loaner_car.name}を今日の午前に返却済みにしますか？" },
+                        class: "btn-outline btn-sm" %>
+                  <%= button_to "午後返却", returned_rental_path(r),
+                        method: :patch,
+                        params: { tab: "list", period: "pm" },
+                        data: { turbo_confirm: "#{r.loaner_car.name}を今日の午後に返却済みにしますか？" },
                         class: "btn-outline btn-sm" %>
                 <% end %>
               </td>
@@ -187,7 +192,7 @@
               <%
                 th_class = []
                 th_class << "grid-today"   if date == Time.zone.today
-                th_class << "grid-weekend" if date.saturday? || date.sunday?
+                th_class << "grid-weekend" if date.saturday? || date.sunday? || HolidayJapan.check(date)
               %>
               <th class="<%= th_class.join(' ') %>">
                 <%= date.strftime("%-m/%-d") %><br>
@@ -209,32 +214,86 @@
                 <%
                   rentals_for_car = (@rental_by_car[car.id] || [])
                   consumed = []
+                  half_rental = lambda do |d, slot_offset|
+                    slot = d.jd * 2 + slot_offset
+                    rentals_for_car.find { |r| r.start_slot <= slot && r.end_slot >= slot }
+                  end
+                  # そのdate/半日枠の1つ前の半日枠と同じ予約でなければ「そこが本当の開始」
+                  starts_here = lambda do |d, slot_offset, rental|
+                    prev = slot_offset.zero? ? half_rental.call(d - 1, 1) : half_rental.call(d, 0)
+                    prev != rental
+                  end
+                  # ラベル表示用：本当の開始でなくても、表示中グリッドの一番最初のマスなら「開始」扱いにする
+                  # （表示範囲より前から続く予約が、色だけでラベルが一切出ない状態を防ぐ）
+                  label_starts_here = lambda do |d, slot_offset, rental|
+                    (d == @grid_start && slot_offset.zero?) || starts_here.call(d, slot_offset, rental)
+                  end
+
                   @grid_dates.each do |date|
-                    unless consumed.include?(date)
-                      rental = rentals_for_car.find { |r| r.start_date <= date && r.end_date >= date }
-                      if rental
-                        end_in_grid = [rental.end_date, @grid_end].min
-                        span_dates  = (date..end_in_grid).to_a
-                        consumed.concat(span_dates)
+                    next if consumed.include?(date)
+                    am_rental = half_rental.call(date, 0)
+                    pm_rental = half_rental.call(date, 1)
+
+                    if am_rental != pm_rental
+                      consumed << date
+                      connects_next = pm_rental.present? && half_rental.call(date + 1, 0) == pm_rental
+                      cell_class = "loaner-grid-half-cell"
+                      cell_class += " loaner-grid-connect-next" if connects_next
                 %>
-                        <td colspan="<%= span_dates.size %>" class="loaner-grid-rented">
+                        <td class="<%= cell_class %>">
+                          <div class="loaner-grid-half-row">
+                            <% [[am_rental, 0], [pm_rental, 1]].each do |rental, offset| %>
+                              <% if rental %>
+                                <%
+                                  half_class = "loaner-grid-half loaner-grid-half--booked"
+                                  half_class += " loaner-grid-start" if starts_here.call(date, offset, rental)
+                                %>
+                                <div class="<%= half_class %>">
+                                  <%= link_to rental_path(rental), class: "loaner-grid-rental-link loaner-grid-rental-link--half" do %>
+                                    <% if label_starts_here.call(date, offset, rental) %>
+                                      <% display_name = rental.customer_name.presence || rental.repair&.customer_name %>
+                                      <span class="grid-rental-status"><%= display_name.presence || "貸出中" %></span>
+                                    <% end %>
+                                  <% end %>
+                                </div>
+                              <% else %>
+                                <div class="loaner-grid-half loaner-grid-half--empty"></div>
+                              <% end %>
+                            <% end %>
+                          </div>
+                        </td>
+                <%
+                    elsif am_rental
+                      rental = am_rental
+                      end_in_grid = [rental.end_date, @grid_end].min
+                      span_dates = (date..end_in_grid).to_a.take_while do |d|
+                        half_rental.call(d, 0) == rental && half_rental.call(d, 1) == rental
+                      end
+                      consumed.concat(span_dates)
+                      connects_next = half_rental.call(span_dates.last + 1, 0) == rental
+                      cell_class = "loaner-grid-rented"
+                      cell_class += " loaner-grid-connect-next" if connects_next
+                      cell_class += " loaner-grid-start" if starts_here.call(span_dates.first, 0, rental)
+                %>
+                        <td colspan="<%= span_dates.size %>" class="<%= cell_class %>">
                           <%= link_to rental_path(rental), class: "loaner-grid-rental-link" do %>
-                            <% display_name = rental.customer_name.presence || rental.repair&.customer_name %>
-                            <span class="grid-rental-status"><%= display_name.presence || "貸出中" %></span>
-                            <% if rental.reason.present? %>
-                              <span class="grid-rental-customer"><%= rental.reason %></span>
+                            <% if label_starts_here.call(span_dates.first, 0, rental) %>
+                              <% display_name = rental.customer_name.presence || rental.repair&.customer_name %>
+                              <span class="grid-rental-status"><%= display_name.presence || "貸出中" %></span>
+                              <% if rental.reason.present? %>
+                                <span class="grid-rental-customer"><%= rental.reason %></span>
+                              <% end %>
                             <% end %>
                           <% end %>
                         </td>
                 <%
-                      else
-                        cell_class = "loaner-grid-empty"
-                        cell_class += " grid-today"   if date == Time.zone.today
-                        cell_class += " grid-weekend" if date.saturday? || date.sunday?
+                    else
+                      cell_class = "loaner-grid-empty"
+                      cell_class += " grid-today"   if date == Time.zone.today
+                      cell_class += " grid-weekend" if date.saturday? || date.sunday? || HolidayJapan.check(date)
                 %>
                         <td class="<%= cell_class %>"></td>
                 <%
-                      end
                     end
                   end
                 %>

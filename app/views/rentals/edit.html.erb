@@ -45,6 +45,17 @@
         <%= f.hidden_field :end_date,   data: { "date-range-target": "endDate" } %>
       </div>
 
+      <div class="form-row">
+        <div>
+          <%= f.label :start_period, "貸出開始", class: "form-label" %>
+          <%= f.select :start_period, [["午前", "am"], ["午後", "pm"]], {}, class: "form-select" %>
+        </div>
+        <div>
+          <%= f.label :end_period, "返却", class: "form-label" %>
+          <%= f.select :end_period, [["午前", "am"], ["午後", "pm"]], {}, class: "form-select" %>
+        </div>
+      </div>
+
       <div class="form-actions">
         <%= f.submit "更新する", class: "btn-primary" %>
         <%= link_to "戻る", rental_path(@rental), class: "btn-outline" %>

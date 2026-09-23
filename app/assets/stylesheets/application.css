@@ -538,6 +538,12 @@ body {
 
 /* ===== Form ===== */
 
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+.form-row > div { flex: 1; min-width: 0; }
+
 .form-label {
   display: block;
   font-weight: 700;
@@ -1129,8 +1135,7 @@ body {
 .loaner-grid-empty.grid-weekend { background: #fafaf9; }
 
 .loaner-grid-rented {
-  background: #eff6ff;
-  border-left: 3px solid #3b82f6;
+  background: #dbeafe;
   padding: 0 10px;
   vertical-align: middle;
 }
@@ -1159,6 +1164,45 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.loaner-grid-half-cell {
+  padding: 0;
+  height: 52px;
+}
+
+.loaner-grid-half-row {
+  display: flex;
+  height: 100%;
+}
+
+.loaner-grid-half {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  overflow: visible;
+  position: relative;
+}
+
+.loaner-grid-half--booked { background: #dbeafe; }
+.loaner-grid-half--empty { background: #fff; }
+
+.loaner-grid-half + .loaner-grid-half { border-left: 1px dashed #cbd5e1; }
+
+/* 予約が本当にそこから始まる場合だけ青いアクセントを出す（継続セルには出さない） */
+.loaner-grid-start { border-left: 3px solid #3b82f6 !important; }
+
+/* 同じ予約が翌日以降も続く場合、セルの区切り線を消して一続きに見せる */
+.loaner-grid-connect-next { border-right: none !important; }
+
+.loaner-grid-rental-link--half {
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
 }
 
 .section-header {

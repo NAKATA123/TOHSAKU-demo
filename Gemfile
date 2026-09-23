@@ -15,6 +15,7 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 gem "kaminari"
+gem "holiday_japan"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]

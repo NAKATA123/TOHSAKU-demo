@@ -3,9 +3,15 @@
     <h1 class="page-title">貸出詳細</h1>
     <div class="page-actions">
       <% if @rental.start_date <= Time.zone.today && @rental.end_date > Time.zone.today %>
-        <%= button_to "今日返却する", returned_rental_path(@rental),
+        <%= button_to "午前に返却", returned_rental_path(@rental),
               method: :patch,
-              data: { turbo_confirm: "#{@rental.loaner_car.name}を今日返却済みにしますか？" },
+              params: { period: "am" },
+              data: { turbo_confirm: "#{@rental.loaner_car.name}を今日の午前に返却済みにしますか？" },
+              class: "btn-primary" %>
+        <%= button_to "午後に返却", returned_rental_path(@rental),
+              method: :patch,
+              params: { period: "pm" },
+              data: { turbo_confirm: "#{@rental.loaner_car.name}を今日の午後に返却済みにしますか？" },
               class: "btn-primary" %>
       <% end %>
       <%= link_to "編集", edit_rental_path(@rental), class: "btn-outline" %>
@@ -36,9 +42,9 @@
     <tr>
       <th>期間</th>
       <td>
-        <%= @rental.start_date.strftime("%Y/%m/%d") %>
+        <%= @rental.start_date.strftime("%Y/%m/%d") %>（<%= period_label(@rental.start_period) %>）
         〜
-        <%= @rental.end_date.strftime("%Y/%m/%d") %>
+        <%= @rental.end_date.strftime("%Y/%m/%d") %>（<%= period_label(@rental.end_period) %>）
       </td>
     </tr>
     <tr>
