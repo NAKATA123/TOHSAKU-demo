@@ -235,6 +235,9 @@ body {
 }
 .push-btn:disabled { opacity: 0.4; cursor: default; }
 
+.push-btn-icon { font-size: 15px; line-height: 1; }
+.push-btn-label { margin-left: 6px; }
+
 .logout form { margin: 0; }
 
 .logout-btn {
@@ -258,6 +261,9 @@ body {
   border-color: rgba(255,255,255,0.40);
   color: rgba(255,255,255,0.85);
 }
+
+.logout-btn-icon { font-size: 15px; line-height: 1; }
+.logout-btn-label { margin-left: 6px; }
 
 /* ===== Titles ===== */
 
@@ -1385,6 +1391,21 @@ span.flatpickr-weekday {
   .brand        { order: 1; padding: 10px 0; }
   .header-right { order: 2; margin-left: auto; gap: 6px; }
   .header-divider { display: none; }
+
+  .brand-logo { height: 26px; }
+  .header-user-role { font-size: 9px; padding: 2px 6px; }
+
+  .settings-icon-btn,
+  .push-btn,
+  .logout-btn {
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0;
+  }
+  .push-btn-label,
+  .logout-btn-label { display: none; }
+  .push-btn-icon,
+  .logout-btn-icon { font-size: 16px; }
   .nav {
     order: 3;
     width: 100%;

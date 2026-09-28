@@ -49,8 +49,12 @@
             <span class="header-user-role"><%= current_user.admin? ? "ADMIN" : "STAFF" %></span>
           </span>
           <%= link_to "⚙️", settings_path, class: "settings-icon-btn #{'active' if current_page?(settings_path)}", title: "設定" %>
-          <button id="push-toggle-btn" class="push-btn" data-subscribed="false">🔕 通知OFF</button>
-          <%= button_to "ログアウト", logout_path, method: :delete, class: "logout-btn" %>
+          <button id="push-toggle-btn" class="push-btn" data-subscribed="false" title="通知OFF">
+            <span class="push-btn-icon">🔕</span><span class="push-btn-label">通知OFF</span>
+          </button>
+          <%= button_to logout_path, method: :delete, class: "logout-btn", title: "ログアウト" do %>
+            <span class="logout-btn-icon">🚪</span><span class="logout-btn-label">ログアウト</span>
+          <% end %>
         </div>
 
       </div>

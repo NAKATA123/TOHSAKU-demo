@@ -51,11 +51,15 @@ async function unsubscribePush() {
   updateButton(false)
 }
 
+function setButtonLabel(btn, icon, label) {
+  btn.innerHTML = `<span class="push-btn-icon">${icon}</span><span class="push-btn-label">${label}</span>`
+}
+
 function updateButton(subscribed) {
   const btn = document.getElementById('push-toggle-btn')
   if (!btn) return
   btn.dataset.subscribed = subscribed ? 'true' : 'false'
-  btn.textContent = subscribed ? '🔔 通知ON' : '🔕 通知OFF'
+  setButtonLabel(btn, subscribed ? '🔔' : '🔕', subscribed ? '通知ON' : '通知OFF')
   btn.classList.toggle('push-btn--on', subscribed)
 }
 
@@ -64,7 +68,7 @@ async function initPushButton() {
   if (!btn || !VAPID_PUBLIC_KEY) return
 
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    btn.textContent = '通知非対応'
+    setButtonLabel(btn, '🔕', '通知非対応')
     btn.disabled = true
     return
   }
