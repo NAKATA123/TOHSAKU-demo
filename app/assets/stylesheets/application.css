@@ -217,22 +217,20 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 44px;
   min-height: 44px;
   font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 6px;
-  border: 1.5px solid #e2e8f0;
-  background: #fff;
-  color: #64748b;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: transparent;
+  color: rgba(255,255,255,0.70);
   cursor: pointer;
   transition: 0.15s;
 }
-.push-btn--on {
-  background: #0f172a;
-  border-color: #0f172a;
-  color: #fff;
-}
+.push-btn:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+.push-btn--on { color: #00d2be; border-color: #00d2be; }
 .push-btn:disabled { opacity: 0.4; cursor: default; }
 
 .push-btn-icon { font-size: 15px; line-height: 1; }
@@ -1393,7 +1391,7 @@ span.flatpickr-weekday {
   .header-divider { display: none; }
 
   .brand-logo { height: 26px; }
-  .header-user-role { font-size: 9px; padding: 2px 6px; }
+  .header-user { display: none; }
 
   .settings-icon-btn,
   .push-btn,
