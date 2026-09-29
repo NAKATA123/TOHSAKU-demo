@@ -37,6 +37,14 @@
               include_blank: "未設定", class: "form-select" %>
       </div>
 
+      <div data-controller="date-range">
+        <label class="form-label">貸出期間</label>
+        <input type="text" class="form-input" placeholder="開始日 〜 終了日"
+               data-date-range-target="display" readonly style="cursor:pointer;">
+        <%= f.hidden_field :start_date, data: { "date-range-target": "startDate" } %>
+        <%= f.hidden_field :end_date,   data: { "date-range-target": "endDate" } %>
+      </div>
+
       <div class="form-row">
         <div>
           <%= f.label :start_period, "貸出開始", class: "form-label" %>
@@ -46,14 +54,6 @@
           <%= f.label :end_period, "返却", class: "form-label" %>
           <%= f.select :end_period, [["午前", "am"], ["午後", "pm"]], {}, class: "form-select" %>
         </div>
-      </div>
-
-      <div data-controller="date-range">
-        <label class="form-label">貸出期間</label>
-        <input type="text" class="form-input" placeholder="開始日 〜 終了日"
-               data-date-range-target="display" readonly style="cursor:pointer;">
-        <%= f.hidden_field :start_date, data: { "date-range-target": "startDate" } %>
-        <%= f.hidden_field :end_date,   data: { "date-range-target": "endDate" } %>
       </div>
 
       <div class="form-actions">
