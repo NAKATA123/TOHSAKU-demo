@@ -1267,11 +1267,21 @@ body {
   font-family: 'Inter', 'IBM Plex Sans JP', sans-serif !important;
 }
 
+.flatpickr-day.jp-weekend {
+  color: #dc2626 !important;
+}
+
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange {
   background: #0a1a20 !important;
   border-color: #0a1a20 !important;
+}
+
+.flatpickr-day.selected.jp-weekend,
+.flatpickr-day.startRange.jp-weekend,
+.flatpickr-day.endRange.jp-weekend {
+  color: #fff !important;
 }
 
 .flatpickr-day.inRange {

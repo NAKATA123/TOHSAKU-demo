@@ -37,7 +37,7 @@
               include_blank: "未設定", class: "form-select" %>
       </div>
 
-      <div data-controller="date-range">
+      <div data-controller="date-range" data-date-range-holidays-value="<%= japanese_holidays_json %>">
         <label class="form-label">貸出期間</label>
         <input type="text" class="form-input" placeholder="開始日 〜 終了日"
                data-date-range-target="display" readonly style="cursor:pointer;">

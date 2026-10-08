@@ -7,4 +7,10 @@ module ApplicationHelper
   def smart_date(date, with_year: "%Y/%m/%d", without_year: "%m/%d")
     date.strftime(date.year == Time.zone.today.year ? without_year : with_year)
   end
+
+  # 日付選択カレンダー用：前後数年分の祝日一覧をJSで使える形で返す
+  def japanese_holidays_json
+    today = Time.zone.today
+    HolidayJapan.between(today.prev_year, today.next_year(2)).keys.map(&:to_s).to_json
+  end
 end
